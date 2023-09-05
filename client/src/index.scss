@@ -1,0 +1,206 @@
+$white: #fff;
+$black: #000;
+$backgrond-color: #eee;
+$background-snackbar: #4b4b4b;
+$shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Trebuchet MS", sans-serif;
+}
+
+body {
+  background-color: $backgrond-color;
+  text-align: center;
+}
+
+.header {
+  width: 100%;
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-image: linear-gradient(to right, rgb(51, 7, 182), rgb(218, 218, 218));
+  padding: 0 7%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+
+  .logo {
+    font-size: 2rem;
+    color: white;
+    text-shadow: 1px 1px 2px #000;
+    font-weight: bold;
+    text-decoration: none;
+  }
+}
+
+.snackbar {
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: $background-snackbar;
+  color: $backgrond-color;
+  text-align: center;
+  border-radius: 2px;
+  padding: 8px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+}
+
+button {
+  appearance: none;
+  border: 1px solid;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 0.4rem 0.6rem;
+  box-shadow: $shadow;
+  opacity: 0.7;
+  transition: 0.3s;
+  background-color: $white;
+  margin: 0 0.2rem;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.loading {
+  margin-top: 2rem;
+}
+
+.recipes {
+  max-width: 800px;
+  margin: auto;
+  margin-top: 2rem;
+
+  .card {
+    display: flex;
+    justify-content: space-between;
+    background-color: $white;
+    padding: 1rem;
+    margin: 1rem 0;
+    text-align: left;
+    border: none;
+    box-shadow: $shadow;
+
+    .container-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .container-image img {
+      width: 160px;
+      max-height: 80px;
+      object-fit: cover;
+      cursor: zoom-in;
+    }
+  }
+
+  label {
+    display: block;
+    margin: 1rem 0 0.25rem 0;
+    text-decoration: underline;
+  }
+
+  ol,
+  ul {
+    list-style-position: inside;
+    display: block;
+  }
+
+  li {
+    line-height: 1.5;
+    margin: 0.3rem 0;
+  }
+
+  .popup-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    text-align: left;
+
+    .popup-inner {
+      background-color: $backgrond-color;
+      ;
+      padding: 1rem;
+      width: 100%;
+      max-width: 480px;
+      overflow: auto;
+      max-height: calc(100vh - 4rem);
+
+      h2 {
+        margin-bottom: 1rem;
+        color: #676767;
+      }
+    }
+
+    .zoom-img {
+      padding: 1rem;
+      width: auto;
+      max-width: auto;
+      overflow: auto;
+      max-height: calc(100vh - 4rem);
+      text-align: center;
+
+      .full-image {
+        display: block;
+        max-height: 350px;
+        max-width: 500px;
+        object-fit: cover;
+      }
+    }
+  }
+
+  .filter {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+  }
+
+  input[type="text"],
+  textarea[type="text"] {
+    display: block;
+    width: 100%;
+    padding: 0.5rem;
+    resize: vertical;
+    max-height: 150px;
+    margin-bottom: 0.5rem;
+  }
+
+  input[type="file"].inputfile {
+    display: block;
+    margin: 1rem 0;
+    resize: none;
+    padding-left: 0;
+  }
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-spinner {
+  margin: 1rem auto;
+  width: 50px;
+  height: 50px;
+  border: 10px solid #f3f3f3;
+  border-top: 10px solid #383636;
+  border-radius: 50%;
+  animation: spinner 1.5s linear infinite;
+}
