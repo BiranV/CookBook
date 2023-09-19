@@ -263,7 +263,7 @@ export default function Recipes() {
                                 style={{ color: "#2F75A1" }}
                                 onClick={handleIngredientCount}
                             >
-                                Add igredient
+                                Add ingredient
                             </button>
                             <label>Steps</label>
                             {form.steps?.map((step, index) => (
