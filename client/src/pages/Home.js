@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
 import Snackbar from "../components/Snackbar";
+import { useSearchParams } from "react-router-dom"
 import axios from 'axios';
 
 export default function Recipes() {
 
     const URL = 'http://localhost:5000/api/'
+
+    const [searchParams, setSearchParams] = useSearchParams({ filter: "" })
+    const filter = searchParams.get("filter")
 
     const [form, setForm] = useState({
         title: "",
@@ -13,7 +17,6 @@ export default function Recipes() {
         image: "",
     });
     const [recipes, setRecipes] = useState([])
-    const [filter, setFilter] = useState("");
     const [loading, setLoading] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [popupActive, setPopupActive] = useState(false);
@@ -178,8 +181,12 @@ export default function Recipes() {
         <div className="recipes">
             <button style={{ color: "#00905B" }} onClick={handleAdd}>Add recipe</button>
             <div className="filter">
-                <input placeholder="Filter" value={filter} id="filter" name="filter" style={{ width: "40%" }} type="text" onChange={(e) => setFilter(e.target.value)
-                } />
+                <input placeholder="Filter" value={filter} id="filter" name="filter" style={{ width: "40%" }} type="text"
+                    onChange={e => setSearchParams(prev => {
+                        prev.set("filter", e.target.value)
+                        return prev;
+                    }, { replace: true })
+                    } />
             </div>
             {recipesFiltered.map((recipe) => (
                 <div className="card" key={recipe._id}>
