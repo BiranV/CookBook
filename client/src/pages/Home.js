@@ -172,7 +172,8 @@ export default function Recipes() {
         setPopupImage(true)
     }
 
-    const recipesFiltered = recipes.filter(recipe => recipe.title.toLowerCase().includes(filter.toLowerCase()) || filter === '')
+    const recipesFiltered = recipes.filter(recipe => recipe.title.toLowerCase().includes(filter) || filter === '')
+    console.log(recipesFiltered)
 
     if (loading) {
         return <div className="spinner-container"><div className="loading-spinner"></div></div>
@@ -183,7 +184,7 @@ export default function Recipes() {
             <div className="filter">
                 <input placeholder="Filter" value={filter} id="filter" name="filter" style={{ width: "40%" }} type="text"
                     onChange={e => setSearchParams(prev => {
-                        prev.set("filter", e.target.value)
+                        prev.set("filter", e.target.value.toLowerCase())
                         return prev;
                     }, { replace: true })
                     } />
