@@ -173,7 +173,6 @@ export default function Recipes() {
     }
 
     const recipesFiltered = recipes.filter(recipe => recipe.title.toLowerCase().includes(filter) || filter === '')
-    console.log(recipesFiltered)
 
     if (loading) {
         return <div className="spinner-container"><div className="loading-spinner"></div></div>
@@ -181,14 +180,12 @@ export default function Recipes() {
     return (
         <div className="recipes">
             <button style={{ color: "#00905B" }} onClick={handleAdd}>Add recipe</button>
-            <div className="filter">
-                <input placeholder="Filter" value={filter} id="filter" name="filter" style={{ width: "40%" }} type="text"
-                    onChange={e => setSearchParams(prev => {
-                        prev.set("filter", e.target.value.toLowerCase())
-                        return prev;
-                    }, { replace: true })
-                    } />
-            </div>
+            <input placeholder="Filter" value={filter} className="filter" id="filter" name="filter" style={{ width: "40%", margin: '1rem auto' }} type="text"
+                onChange={e => setSearchParams(prev => {
+                    prev.set("filter", e.target.value.toLowerCase())
+                    return prev;
+                }, { replace: true })
+                } />
             {recipesFiltered.map((recipe) => (
                 <div className="card" key={recipe._id}>
                     <div className="container-card">
