@@ -287,7 +287,11 @@ export default function Recipes() {
                                 type="file"
                                 onChange={handleImageUpload}
                             />
-                            {form.image === "" || form.image === null ? "" : <img alt="uploaded img" width={100} height={100} src={form.image} style={{ display: "block", marginBottom: "0.5rem" }} />}
+                            <div className="container-image">
+                                {form.image === "" || form.image === null ? "" :
+
+                                    <img alt="uploaded img" src={form.image} onClick={() => { openFullImage(form.image) }} />}
+                            </div>
                             <button type="submit" style={{ color: "#00905B" }}>
                                 Submit
                             </button>

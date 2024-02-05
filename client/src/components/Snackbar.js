@@ -1,3 +1,5 @@
-export default function SnackBar({ text }) {
-  return <div className="snackbar">Item {text} successfully</div>;
+const Snackbar = ({ text }) => {
+  return <div className="snackbar">{text}</div>;
 }
+
+export default Snackbar
