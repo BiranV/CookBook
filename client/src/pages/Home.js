@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
 import Snackbar from "../components/Snackbar";
 import { useSearchParams } from "react-router-dom"
-import axios from 'axios';
+import axios from "../api/axios"
 
 export default function Recipes() {
-
-    const URL = 'http://localhost:5000/api/'
 
     const [searchParams, setSearchParams] = useSearchParams({ filter: "" })
     const filter = searchParams.get("filter")
@@ -31,7 +29,7 @@ export default function Recipes() {
         const fetchData = async () => {
             setLoading(true)
             try {
-                const response = await axios.get(URL);
+                const response = await axios.get("/");
                 setRecipes(response.data);
             } catch (error) {
                 console.error(error.message);
@@ -60,15 +58,21 @@ export default function Recipes() {
             }
         });
     };
-    const handleDelete = async (id) => {
-        const newItems = recipes.filter((item) => (item._id !== id));
-        try {
-            const response = await axios.delete(URL + id);
-            handleSnackbar(response.data.message)
-            setRecipes(newItems);
-        } catch (error) {
-            console.error(error.message);
+    const handleDelete = async (recipe) => {
+        const newItems = recipes.filter((item) => (item._id !== recipe._id));
+        /* eslint-disable no-restricted-globals */
+        const result = confirm(`Are you sure want to delete ${ recipe.title } recipe?`);
+        if (result) {
+            try {
+                const response = await axios.delete("/" + recipe._id);
+                handleSnackbar(response.data.message)
+                setRecipes(newItems);
+            } catch (error) {
+                console.error(error.message);
+            }
         }
+        /* eslint-enable no-restricted-globals */
+
     };
 
     const handleView = (id) => {
@@ -95,7 +99,7 @@ export default function Recipes() {
             const exist = [...recipes].filter((item => item._id === form._id))
             if (exist.length > 0) {
                 try {
-                    const response = await axios.put(URL + form._id, form);
+                    const response = await axios.put("/" + form._id, form);
                     setRecipes(prev => prev.map(recipe => {
                         if (recipe._id === response.data.obj._id) {
                             handleSnackbar(response.data.message);
@@ -112,7 +116,7 @@ export default function Recipes() {
                 }
             } else {
                 try {
-                    const response = await axios.post(URL, form)
+                    const response = await axios.post("/", form)
                     const newRecipe = response.data.obj;
                     setRecipes(prev => [...prev, newRecipe]);
                     handleSnackbar(response.data.message);
@@ -222,7 +226,7 @@ export default function Recipes() {
                             </button>
                             <button
                                 style={{ color: "#DB3052" }}
-                                onClick={() => handleDelete(recipe._id)}
+                                onClick={() => handleDelete(recipe)}
                             >
                                 Delete
                             </button>
