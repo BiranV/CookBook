@@ -1,6 +1,6 @@
 const RecipeForm = ({
     formData,
-    handleInputChange,
+    handleTitle,
     handleIngredient,
     handleStep,
     handleIngredientCount,
@@ -16,7 +16,7 @@ const RecipeForm = ({
                 <h2>{popupState.editMode ? "Edit" : "Add"} recipe</h2>
                 <form onSubmit={handleSubmit}>
                     <label>Title</label>
-                    <input name="title" type="text" value={formData.title} onChange={handleInputChange} />
+                    <input name="title" type="text" value={formData.title} onChange={(e) => handleTitle(e)} />
                     <label>Ingredients</label>
                     {formData.ingredients?.map((ingredient, index) => (
                         <input type="text" key={index} value={ingredient} onChange={(e) => handleIngredient(e, index)} />

@@ -181,6 +181,10 @@ export default function Home() {
         };
     };
 
+    const handleTitle = (e) => {
+        setFormData({ ...formData, title: e.target.value });
+    };
+
     const handleIngredient = (e, index) => {
         const ingredientsClone = [...formData.ingredients];
         ingredientsClone[index] = e.target.value;
@@ -248,6 +252,7 @@ export default function Home() {
                     handleStepCount={handleStepCount}
                     setPopupState={setPopupState}
                     openFullImage={openFullImage}
+                    handleTitle={handleTitle}
                 />
             )}
             {popupImage && (
