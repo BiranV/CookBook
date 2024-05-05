@@ -1,14 +1,13 @@
-// Home.jsx
 import { useState, useEffect } from "react";
-import Snackbar from "../components/Snackbar";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import axios from "../api/axios";
 import { jwtDecode } from "jwt-decode";
+import axios from "../api/axios";
 import Card from "../components/Card";
 import Form from "../components/Form";
 import ImageModal from "../components/ImageModal";
 import FilterInput from "../components/FilterInput";
 import Spinner from "../components/Spinner";
+import Snackbar from "../components/Snackbar";
 
 export default function Home() {
     const navigate = useNavigate();
