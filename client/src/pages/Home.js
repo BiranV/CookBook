@@ -5,7 +5,7 @@ import axios from "../api/axios";
 import Card from "../components/Card";
 import Form from "../components/Form";
 import ImageModal from "../components/ImageModal";
-import FilterInput from "../components/FilterInput";
+import Filter from "../components/Filter";
 import Spinner from "../components/Spinner";
 import Snackbar from "../components/Snackbar";
 
@@ -225,7 +225,7 @@ export default function Home() {
     return (
         <div className="home-container">
             <button style={{ color: "#00905B" }} onClick={handleAdd}>Add recipe</button>
-            <FilterInput
+            <Filter
                 value={filter}
                 onChange={(e) => setSearchParams((prev) => { prev.set("filter", e.target.value.toLowerCase()); return prev; }, { replace: true })}
             />

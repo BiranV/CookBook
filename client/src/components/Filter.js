@@ -1,4 +1,4 @@
-const FilterInput = ({ value, onChange }) => {
+const Filter = ({ value, onChange }) => {
     return (
         <input
             placeholder="Filter"
@@ -13,4 +13,4 @@ const FilterInput = ({ value, onChange }) => {
     );
 }
 
-export default FilterInput;
+export default Filter;
