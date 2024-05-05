@@ -1,6 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 
-const RecipeCard = ({ recipe, handleView, handleEdit, handleDelete, openFullImage }) => {
+const Card = ({ recipe, handleView, handleEdit, handleDelete, openFullImage }) => {
 
     const getUserEmailFromToken = () => {
         const token = localStorage.getItem("token");
@@ -48,4 +48,4 @@ const RecipeCard = ({ recipe, handleView, handleEdit, handleDelete, openFullImag
     );
 }
 
-export default RecipeCard;
+export default Card;

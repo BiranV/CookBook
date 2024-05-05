@@ -1,4 +1,4 @@
-const RecipeForm = ({
+const Form = ({
     formData,
     handleTitle,
     handleIngredient,
@@ -39,4 +39,4 @@ const RecipeForm = ({
     );
 }
 
-export default RecipeForm;
+export default Form;

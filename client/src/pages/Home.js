@@ -4,11 +4,11 @@ import Snackbar from "../components/Snackbar";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 import { jwtDecode } from "jwt-decode";
-import RecipeCard from "../components/RecipeCard";
-import RecipeForm from "../components/RecipeForm";
+import Card from "../components/Card";
+import Form from "../components/Form";
 import ImageModal from "../components/ImageModal";
 import FilterInput from "../components/FilterInput";
-import LoadingSpinner from "../components/LoadingSpinner";
+import Spinner from "../components/Spinner";
 
 export default function Home() {
     const navigate = useNavigate();
@@ -220,7 +220,7 @@ export default function Home() {
     const recipesFiltered = recipes.filter((recipe) => recipe.title.toLowerCase().includes(filter) || filter === "");
 
     if (loading) {
-        return <LoadingSpinner />;
+        return <Spinner />;
     }
 
     return (
@@ -231,7 +231,7 @@ export default function Home() {
                 onChange={(e) => setSearchParams((prev) => { prev.set("filter", e.target.value.toLowerCase()); return prev; }, { replace: true })}
             />
             {recipesFiltered.map((recipe) => (
-                <RecipeCard
+                <Card
                     key={recipe._id}
                     recipe={recipe}
                     handleView={handleView}
@@ -241,7 +241,7 @@ export default function Home() {
                 />
             ))}
             {popupState.active && (
-                <RecipeForm
+                <Form
                     formData={formData}
                     popupState={popupState}
                     handleSubmit={handleSubmit}
