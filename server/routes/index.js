@@ -1,10 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const recipesControllers = require('../controllers/index');
+const authControllers = require('../controllers/auth');
+const recipesControllers = require('../controllers/recipes');
+const { verifyToken } = require('../middlewares/auth');
 
-router.get('/', recipesControllers.getAllRecipes);
-router.post('/', recipesControllers.createRecipe);
-router.put('/:id', recipesControllers.updateRecipe);
-router.delete('/:id', recipesControllers.deleteRecipe);
+// Authentication routes
+router.post('/login', authControllers.login);
+router.post('/signup', authControllers.signup);
+
+// Recipe routes (protected with verifyToken middleware)
+router.get('/', verifyToken, recipesControllers.getAllRecipes);
+router.post('/', verifyToken, recipesControllers.createRecipe);
+router.put('/:id', verifyToken, recipesControllers.updateRecipe);
+router.delete('/:id', verifyToken, recipesControllers.deleteRecipe);
 
 module.exports = router;

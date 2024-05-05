@@ -1,131 +1,172 @@
+// Home.jsx
 import { useState, useEffect } from "react";
 import Snackbar from "../components/Snackbar";
-import { useSearchParams } from "react-router-dom"
-import axios from "../api/axios"
+import { useSearchParams, useNavigate } from "react-router-dom";
+import axios from "../api/axios";
+import { jwtDecode } from "jwt-decode";
+import RecipeCard from "../components/RecipeCard";
+import RecipeForm from "../components/RecipeForm";
+import ImageModal from "../components/ImageModal";
+import FilterInput from "../components/FilterInput";
+import LoadingSpinner from "../components/LoadingSpinner";
 
-export default function Recipes() {
+export default function Home() {
+    const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams({ filter: "" });
+    const filter = searchParams.get("filter");
 
-    const [searchParams, setSearchParams] = useSearchParams({ filter: "" })
-    const filter = searchParams.get("filter")
-
-    const [form, setForm] = useState({
+    const [formData, setFormData] = useState({
         title: "",
         ingredients: [],
         steps: [],
         image: "",
     });
-    const [recipes, setRecipes] = useState([])
+    const [recipes, setRecipes] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [editMode, setEditMode] = useState(false);
-    const [popupActive, setPopupActive] = useState(false);
+    const [popupState, setPopupState] = useState({
+        active: false,
+        editMode: false,
+    });
     const [popupImage, setPopupImage] = useState(false);
-    const [fullImage, setFullImage] = useState("");
+    const [imageUrl, setImageUrl] = useState("");
     const [snackbarActive, setSnackbarActive] = useState({
         show: false,
         text: "",
     });
 
     useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true)
+        const checkLoggedIn = async () => {
             try {
-                const response = await axios.get("/");
+                const token = localStorage.getItem("token");
+                if (!token) {
+                    navigate("/auth");
+                    return;
+                }
+                setLoading(true);
+                const response = await axios.get("/", {
+                    headers: {
+                        Authorization: `Bearer ${ token }`,
+                    },
+                    params: {
+                        userEmail: localStorage.getItem("userEmail"),
+                    },
+                });
                 setRecipes(response.data);
             } catch (error) {
                 console.error(error.message);
+            } finally {
+                setLoading(false);
             }
-            setLoading(false)
-        }
-        fetchData();
-    }, []);
+        };
+        checkLoggedIn();
+    }, [navigate]);
 
     const handleAdd = () => {
-        setEditMode(false);
-        setForm({
+        if (!localStorage.getItem("token")) {
+            navigate("/auth");
+            return;
+        }
+        setPopupState({ active: true, editMode: false });
+        setFormData({
             title: "",
             ingredients: [],
             steps: [],
             image: "",
         });
-        setPopupActive(true);
     };
-    const handleEdit = (id) => {
-        recipes.forEach((recipe) => {
-            if (recipe._id === id) {
-                setForm({ ...recipe })
-                setEditMode(true)
-                setPopupActive(true)
+
+    const handleEdit = (id, image) => {
+        if (!localStorage.getItem("token")) {
+            navigate("/auth");
+            return;
+        }
+        const recipe = recipes.find((recipe) => recipe._id === id);
+        if (recipe) {
+            if (recipe.userEmail !== getUserEmailFromToken()) {
+                alert("You are not authorized to edit this recipe.");
+                return;
             }
-        });
+            setFormData({ ...recipe });
+            setPopupState({ active: true, editMode: true });
+        }
     };
+
     const handleDelete = async (recipe) => {
-        const newItems = recipes.filter((item) => (item._id !== recipe._id));
-        /* eslint-disable no-restricted-globals */
-        const result = confirm(`Are you sure want to delete ${ recipe.title } recipe?`);
-        if (result) {
+        if (!localStorage.getItem("token")) {
+            navigate("/auth");
+            return;
+        }
+        const result = window.confirm(`Are you sure want to delete ${ recipe.title } recipe?`);
+        if (!result) return;
+        try {
+            const token = localStorage.getItem("token");
+            const headers = {
+                Authorization: `Bearer ${ token }`,
+            };
+
+            // Check if the logged-in user is the creator of the recipe
+            if (recipe.userEmail !== getUserEmailFromToken()) {
+                alert("You are not authorized to delete this recipe.");
+                return;
+            }
+
+            const response = await axios.delete("/" + recipe._id, { headers });
+            setRecipes((prevRecipes) => prevRecipes.filter((prevRecipe) => prevRecipe._id !== recipe._id));
+            handleSnackbar(response.data.message);
+        } catch (error) {
+            console.error(error.message);
+        }
+    };
+
+    const getUserEmailFromToken = () => {
+        const token = localStorage.getItem("token");
+        if (token) {
             try {
-                const response = await axios.delete("/" + recipe._id);
-                handleSnackbar(response.data.message)
-                setRecipes(newItems);
+                const decodedToken = jwtDecode(token);
+                return decodedToken.email;
             } catch (error) {
-                console.error(error.message);
+                console.error("Error decoding token:", error);
             }
         }
-        /* eslint-enable no-restricted-globals */
-
+        return null;
     };
 
     const handleView = (id) => {
-        const updatedRecipes = [...recipes]
-        updatedRecipes.forEach((recipe) => {
-            if (recipe._id === id) {
-                recipe.viewing = !recipe.viewing
-            } else { recipe.viewing = false };
-        });
-        setRecipes(updatedRecipes)
-    }
+        setRecipes((prevRecipes) =>
+            prevRecipes.map((recipe) => ({
+                ...recipe,
+                viewing: recipe._id === id ? !recipe.viewing : false,
+            }))
+        );
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (
-            !form.title ||
-            form.ingredients.length < 1 ||
-            form.steps.length < 1
-            || !form.image
-        ) {
+        if (!formData.title || formData.ingredients.length < 1 || formData.steps.length < 1 || !formData.image) {
             alert("Please fill out all fields");
             return;
-        } else {
-            const exist = [...recipes].filter((item => item._id === form._id))
-            if (exist.length > 0) {
-                try {
-                    const response = await axios.put("/" + form._id, form);
-                    setRecipes(prev => prev.map(recipe => {
-                        if (recipe._id === response.data.obj._id) {
-                            handleSnackbar(response.data.message);
-                            setForm({ title: "", ingredients: [], steps: [], image: "" });
-                            setPopupActive(false);
-                            return form;
-                        }
-                        return recipe;
-                    })
-                    );
-
-                } catch (error) {
-                    console.error(error.message);
-                }
-            } else {
-                try {
-                    const response = await axios.post("/", form)
-                    const newRecipe = response.data.obj;
-                    setRecipes(prev => [...prev, newRecipe]);
-                    handleSnackbar(response.data.message);
-                    setForm({ title: "", ingredients: [], steps: [], image: "" });
-                    setPopupActive(false);
-                } catch (error) {
-                    console.error(error.message);
-                }
+        }
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                navigate("/auth");
+                return;
             }
+            const headers = {
+                Authorization: `Bearer ${ token }`,
+            };
+            const response = popupState.editMode
+                ? await axios.put("/" + formData._id, formData, { headers })
+                : await axios.post("/", { ...formData, userEmail: localStorage.getItem("userEmail") }, { headers });
+            const updatedRecipes = popupState.editMode
+                ? recipes.map((recipe) => (recipe._id === response.data.obj._id ? formData : recipe))
+                : [...recipes, response.data.obj];
+            setRecipes(updatedRecipes);
+            handleSnackbar(response.data.message);
+            setFormData({ title: "", ingredients: [], steps: [], image: "" });
+            setPopupState({ ...popupState, active: false });
+        } catch (error) {
+            console.error(error.message);
         }
     };
 
@@ -133,35 +174,31 @@ export default function Recipes() {
         const reader = new FileReader();
         reader.readAsDataURL(e.target.files[0]);
         reader.onloadend = () => {
-            setForm({ ...form, image: reader.result });
+            setFormData({ ...formData, image: reader.result });
         };
         reader.onerror = (error) => {
-            console.log("Error: ", error)
+            console.error("Error: ", error);
         };
     };
 
     const handleIngredient = (e, index) => {
-        const ingredientsClone = [...form.ingredients];
+        const ingredientsClone = [...formData.ingredients];
         ingredientsClone[index] = e.target.value;
-        setForm({
-            ...form,
-            ingredients: ingredientsClone,
-        });
+        setFormData({ ...formData, ingredients: ingredientsClone });
     };
+
     const handleStep = (e, index) => {
-        const stepsClone = [...form.steps];
+        const stepsClone = [...formData.steps];
         stepsClone[index] = e.target.value;
-        setForm({
-            ...form,
-            steps: stepsClone,
-        });
+        setFormData({ ...formData, steps: stepsClone });
     };
+
     const handleIngredientCount = () => {
-        setForm({ ...form, ingredients: [...form.ingredients, ""] });
+        setFormData({ ...formData, ingredients: [...formData.ingredients, ""] });
     };
 
     const handleStepCount = () => {
-        setForm({ ...form, steps: [...form.steps, ""] });
+        setFormData({ ...formData, steps: [...formData.steps, ""] });
     };
 
     const handleSnackbar = (val) => {
@@ -172,148 +209,53 @@ export default function Recipes() {
     };
 
     const openFullImage = (val) => {
-        setFullImage(val)
-        setPopupImage(true)
-    }
+        setImageUrl(val);
+        setPopupImage(true);
+    };
 
-    const recipesFiltered = recipes.filter(recipe => recipe.title.toLowerCase().includes(filter) || filter === '')
+    const recipesFiltered = recipes.filter((recipe) => recipe.title.toLowerCase().includes(filter) || filter === "");
 
     if (loading) {
-        return <div className="spinner-container"><div className="loading-spinner"></div></div>
+        return <LoadingSpinner />;
     }
+
     return (
-        <div className="recipes">
+        <div className="home-container">
             <button style={{ color: "#00905B" }} onClick={handleAdd}>Add recipe</button>
-            <input placeholder="Filter" value={filter} className="filter" id="filter" name="filter" style={{ width: "40%", margin: '1rem auto' }} type="text"
-                onChange={e => setSearchParams(prev => {
-                    prev.set("filter", e.target.value.toLowerCase())
-                    return prev;
-                }, { replace: true })
-                } />
+            <FilterInput
+                value={filter}
+                onChange={(e) => setSearchParams((prev) => { prev.set("filter", e.target.value.toLowerCase()); return prev; }, { replace: true })}
+            />
             {recipesFiltered.map((recipe) => (
-                <div className="card" key={recipe._id}>
-                    <div className="container-card">
-                        <div><h2>{recipe.title}</h2></div>
-                        <div>
-                            {recipe.viewing && (
-                                <div>
-                                    <label>Ingredients</label>
-                                    <ul>
-                                        {recipe.ingredients.map((ingredient, index) => (
-                                            <li key={index}>{ingredient}</li>
-                                        ))}
-                                    </ul>
-                                    <label>Steps</label>
-                                    <ol>
-                                        {recipe.steps.map((step, index) => (
-                                            <li key={index}>{step}</li>
-                                        ))}
-                                    </ol>
-                                </div>
-                            )}</div>
-                        <div className="buttons">
-                            <button
-                                style={{ color: "#2F75D1" }}
-                                onClick={() => handleView(recipe._id)}
-                            >
-                                View {recipe.viewing ? "less" : "more"}
-                            </button>
-                            <button
-                                style={{ color: "#D07C2E" }}
-                                onClick={() => handleEdit(recipe._id, recipe.image)}
-                            >
-                                Edit
-                            </button>
-                            <button
-                                style={{ color: "#DB3052" }}
-                                onClick={() => handleDelete(recipe)}
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    </div>
-                    <div className="container-image"> <img src={recipe.image} alt="uploaded img" onClick={() => { openFullImage(recipe.image) }} /></div>
-                </div>
+                <RecipeCard
+                    key={recipe._id}
+                    recipe={recipe}
+                    handleView={handleView}
+                    handleEdit={handleEdit}
+                    handleDelete={handleDelete}
+                    openFullImage={openFullImage}
+                />
             ))}
-
-            {popupActive && (
-                <div className="popup-container">
-                    <div className="popup-inner">
-                        <h2>{editMode ? "Edit" : "Add"} recipe</h2>
-                        <form onSubmit={handleSubmit}>
-                            <label>Title</label>
-                            <input
-                                name="title"
-                                type="text"
-                                value={form.title}
-                                onChange={(e) =>
-                                    setForm({ ...form, title: e.target.value })
-                                }
-                            />
-                            <label>Ingredients</label>
-                            {form.ingredients?.map((ingredient, index) => (
-                                <input
-                                    type="text"
-                                    key={index}
-                                    value={ingredient}
-                                    onChange={(e) => handleIngredient(e, index)}
-                                />
-                            ))}
-                            <button
-                                type="button"
-                                style={{ color: "#2F75A1" }}
-                                onClick={handleIngredientCount}
-                            >
-                                Add ingredient
-                            </button>
-                            <label>Steps</label>
-                            {form.steps?.map((step, index) => (
-                                <textarea
-                                    type="text"
-                                    key={index}
-                                    value={step}
-                                    onChange={(e) => handleStep(e, index)}
-                                />
-                            ))}
-                            <button
-                                type="button"
-                                style={{ color: "#2F75A1" }}
-                                onClick={handleStepCount}
-                            >
-                                Add step
-                            </button>
-                            <input
-                                className="inputfile"
-                                type="file"
-                                onChange={handleImageUpload}
-                            />
-                            <div className="container-image">
-                                {form.image === "" || form.image === null ? "" :
-
-                                    <img alt="uploaded img" src={form.image} onClick={() => { openFullImage(form.image) }} />}
-                            </div>
-                            <button type="submit" style={{ color: "#00905B" }}>
-                                Submit
-                            </button>
-                            <button
-                                type="button"
-                                style={{ color: "#DB3052" }}
-                                onClick={() => setPopupActive(false)}
-                            >
-                                Close
-                            </button>
-                        </form>
-                    </div>
-                </div>
+            {popupState.active && (
+                <RecipeForm
+                    formData={formData}
+                    popupState={popupState}
+                    handleSubmit={handleSubmit}
+                    handleImageUpload={handleImageUpload}
+                    handleIngredient={handleIngredient}
+                    handleStep={handleStep}
+                    handleIngredientCount={handleIngredientCount}
+                    handleStepCount={handleStepCount}
+                    setPopupState={setPopupState}
+                    openFullImage={openFullImage}
+                />
             )}
-            {popupImage &&
-                <div className="popup-container">
-                    <div className="zoom-img">
-                        <img className="full-image" alt="uploaded img" src={fullImage} />
-                        <button style={{ color: "#DB3052", marginTop: "0.5rem" }} onClick={() => { setPopupImage(false) }}>Close</button>
-                    </div>
-                </div>
-            }
+            {popupImage && (
+                <ImageModal
+                    imageUrl={imageUrl}
+                    setPopupImage={setPopupImage}
+                />
+            )}
             {snackbarActive.show && <Snackbar text={snackbarActive.text} />}
         </div>
     );
