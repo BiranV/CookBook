@@ -4,11 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon server.js",
-    "client": "cd ../client  && npm start",
-    "start": "concurrently \"nodemon server\" \"npm run client\"",
-    "dev": "concurrently \"nodemon server\" \"npm run client\"",
-    "build": "concurrently \"nodemon server\" \"npm run client\""
+    "start": "nodemon server.js",
+    "dev": "nodemon server.js",
+    "build": "echo 'No build step required for server deployment'"
   },
   "author": "",
   "license": "ISC",
