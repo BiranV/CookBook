@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import { getUserEmailFromToken } from "../utils/authUtils";
 import axios from "../api/axios";
 import Card from "../components/Card";
 import Form from "../components/Form";
@@ -117,19 +117,6 @@ export default function Home() {
         }
     };
 
-    const getUserEmailFromToken = () => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            try {
-                const decodedToken = jwtDecode(token);
-                return decodedToken.email;
-            } catch (error) {
-                console.error("Error decoding token:", error);
-            }
-        }
-        return null;
-    };
-
     const handleView = (id) => {
         setRecipes((prevRecipes) =>
             prevRecipes.map((recipe) => ({
@@ -224,7 +211,7 @@ export default function Home() {
 
     return (
         <div className="home-container">
-            <button style={{ color: "#00905B" }} onClick={handleAdd}>Add recipe</button>
+            <button style={{ color: "#3307B6" }} onClick={handleAdd}>Add recipe</button>
             <Filter
                 value={filter}
                 onChange={(e) => setSearchParams((prev) => { prev.set("filter", e.target.value.toLowerCase()); return prev; }, { replace: true })}
