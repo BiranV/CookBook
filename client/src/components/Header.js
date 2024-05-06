@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 
 
-export default function MainNavigation() {
+export default function Header() {
   const navigate = useNavigate();
   const location = useLocation();
 
