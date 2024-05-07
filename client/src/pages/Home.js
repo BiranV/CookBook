@@ -72,7 +72,7 @@ const Home = () => {
         });
     };
 
-    const handleEdit = (id, image) => {
+    const handleEdit = (id) => {
         const recipe = recipes.find((recipe) => recipe._id === id);
         if (recipe) {
             if (recipe.userEmail !== getUserEmailFromToken()) {
@@ -138,7 +138,7 @@ const Home = () => {
                     Authorization: `Bearer ${ token }`,
                 };
                 const response = await axios.post("/", { ...updatedForm, userEmail: localStorage.getItem("userEmail") }, { headers });
-                const updatedRecipe = response.data.obj;
+                const updatedRecipe = { ...response.data.obj, viewing: true }
                 setRecipes((prevRecipes) => [...prevRecipes, updatedRecipe]);
                 handleSnackbar(response.data.message);
                 setForm({ title: "", ingredients: [], steps: [], image: "" });
@@ -176,7 +176,7 @@ const Home = () => {
             const token = localStorage.getItem("token");
             const headers = { Authorization: `Bearer ${ token }` };
             const response = await axios.put(editedForm._id, editedForm, { headers });
-            const updatedRecipe = response.data.obj;
+            const updatedRecipe = { ...response.data.obj, viewing: true };
             setRecipes((prevRecipes) =>
                 prevRecipes.map((recipe) => (recipe._id === updatedRecipe._id ? updatedRecipe : recipe))
             );
