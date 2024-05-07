@@ -100,6 +100,9 @@ const Home = () => {
                 return;
             }
 
+            const imageRef = ref(storage, recipe.image);
+            await deleteObject(imageRef);
+
             const response = await axios.delete("/" + recipe._id, { headers });
             setRecipes((prevRecipes) => prevRecipes.filter((prevRecipe) => prevRecipe._id !== recipe._id));
             handleSnackbar(response.data.message);
