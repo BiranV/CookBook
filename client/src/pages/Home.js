@@ -23,6 +23,7 @@ const Home = () => {
         title: "",
         ingredients: [],
         steps: [],
+        image: ""
     });
     const [loading, setLoading] = useState(false);
     const [popupState, setPopupState] = useState({
