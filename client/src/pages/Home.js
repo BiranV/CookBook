@@ -184,6 +184,8 @@ const Home = () => {
             const updatedRecipes = recipes.map((recipe) => ({
                 ...recipe,
                 viewing: recipe._id === updatedRecipe._id ? true : false,
+                image: recipe._id === updatedRecipe._id ? updatedRecipe.image : recipe.image
+
             }));
             setRecipes(updatedRecipes);
             handleSnackbar(response.data.message);
