@@ -138,8 +138,12 @@ const Home = () => {
                     Authorization: `Bearer ${ token }`,
                 };
                 const response = await axios.post("/", { ...updatedForm, userEmail: localStorage.getItem("userEmail") }, { headers });
-                const updatedRecipe = { ...response.data.obj, viewing: true }
-                setRecipes((prevRecipes) => [...prevRecipes, updatedRecipe]);
+                const updatedRecipe = { ...response.data.obj, viewing: true }; // Set viewing to true
+                const updatedRecipes = recipes.map((recipe) => ({
+                    ...recipe,
+                    viewing: false,
+                }));
+                setRecipes([...updatedRecipes, updatedRecipe]);
                 handleSnackbar(response.data.message);
                 setForm({ title: "", ingredients: [], steps: [], image: "" });
                 setPopupState({ ...popupState, active: false });
@@ -177,9 +181,11 @@ const Home = () => {
             const headers = { Authorization: `Bearer ${ token }` };
             const response = await axios.put(editedForm._id, editedForm, { headers });
             const updatedRecipe = { ...response.data.obj, viewing: true };
-            setRecipes((prevRecipes) =>
-                prevRecipes.map((recipe) => (recipe._id === updatedRecipe._id ? updatedRecipe : recipe))
-            );
+            const updatedRecipes = recipes.map((recipe) => ({
+                ...recipe,
+                viewing: recipe._id === updatedRecipe._id ? true : false,
+            }));
+            setRecipes(updatedRecipes);
             handleSnackbar(response.data.message);
             setForm({ title: "", ingredients: [], steps: [], image: "" });
             setPopupState({ ...popupState, active: false });
