@@ -26,7 +26,6 @@ const Home = () => {
         image: ""
     });
     const [loading, setLoading] = useState(false);
-    const [submitting, setSubmitting] = useState(false);
     const [popupState, setPopupState] = useState({
         active: false,
         editMode: false,
@@ -128,7 +127,7 @@ const Home = () => {
             alert("Please fill out all fields");
             return;
         }
-        setSubmitting(true);
+        setLoading(true);
         try {
             const imageRef = ref(storage, `images/${ uuidv4() }`);
             await uploadBytes(imageRef, imageUpload);
@@ -160,7 +159,7 @@ const Home = () => {
             console.error('Error uploading image:', error);
             setSnackbar("Failed to upload image");
         }
-        setSubmitting(false);
+        setLoading(false);
     };
 
     const submitEditRecipe = async (e) => {
@@ -170,7 +169,7 @@ const Home = () => {
             alert("Please fill out all fields");
             return;
         }
-        setSubmitting(true);
+        setLoading(true);
         const editedForm = { ...form };
         try {
             if (imageUpload) {
@@ -206,7 +205,7 @@ const Home = () => {
         } catch (error) {
             console.error('Error updating movie:', error);
         }
-        setSubmitting(false);
+        setLoading(false);
     };
 
     const handleTitle = (e) => {
@@ -310,7 +309,7 @@ const Home = () => {
                             <div className="container-image">
                                 {form.image && <img alt="uploaded img" src={form.image} />}
                             </div>
-                            <button type="submit" disabled={submitting} style={{ color: "#00905B" }}>Submit</button>
+                            <button type="submit" disabled={loading} style={{ color: "#00905B" }}>Submit</button>
                             <button type="button" style={{ color: "#DB3052" }} onClick={() => setPopupState({ ...popupState, active: false })}>Close</button>
                         </form>
                     </div>
