@@ -9,6 +9,7 @@ import ImageModal from "../components/ImageModal";
 import Filter from "../components/Filter";
 import Spinner from "../components/Spinner";
 import Snackbar from "../components/Snackbar";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 const Home = () => {
     const navigate = useNavigate();
@@ -70,7 +71,6 @@ const Home = () => {
             steps: [],
             image: "",
         });
-        setImageUpload(null);
     };
 
     const handleEdit = (id) => {
@@ -124,7 +124,7 @@ const Home = () => {
     const submitAddRecipe = async (e) => {
         e.preventDefault();
 
-        if (!form.title || form.ingredients.length < 1 || form.steps.length < 1 || !imageUpload) {
+        if (!form.title || form.ingredients.some(ingredient => !ingredient.trim()) || form.steps.some(step => !step.trim()) || !imageUpload || form.ingredients.length < 1 || form.steps.length < 1) {
             alert("Please fill out all fields");
             return;
         }
@@ -166,7 +166,7 @@ const Home = () => {
     const submitEditRecipe = async (e) => {
         e.preventDefault();
 
-        if (!form.title || form.ingredients.length < 1 || form.steps.length < 1 || !imageUpload) {
+        if (!form.title || form.ingredients.some(ingredient => !ingredient.trim()) || form.steps.some(step => !step.trim()) || form.ingredients.length < 1 || form.steps.length < 1) {
             alert("Please fill out all fields");
             return;
         }
@@ -219,18 +219,30 @@ const Home = () => {
         setForm({ ...form, ingredients: ingredientsClone });
     };
 
+    const handleIngredientCount = () => {
+        setForm({ ...form, ingredients: [...form.ingredients, ""] });
+    };
+
+    const handleRemoveIngredient = (index) => {
+        const ingredientsClone = [...form.ingredients];
+        ingredientsClone.splice(index, 1);
+        setForm({ ...form, ingredients: ingredientsClone });
+    };
+
     const handleStep = (e, index) => {
         const stepsClone = [...form.steps];
         stepsClone[index] = e.target.value;
         setForm({ ...form, steps: stepsClone });
     };
 
-    const handleIngredientCount = () => {
-        setForm({ ...form, ingredients: [...form.ingredients, ""] });
-    };
-
     const handleStepCount = () => {
         setForm({ ...form, steps: [...form.steps, ""] });
+    };
+
+    const handleRemoveStep = (index) => {
+        const stepsClone = [...form.steps];
+        stepsClone.splice(index, 1);
+        setForm({ ...form, steps: stepsClone });
     };
 
     const handleSnackbar = (val) => {
@@ -298,12 +310,18 @@ const Home = () => {
                             <input name="title" type="text" value={form.title} onChange={handleTitle} />
                             <label>Ingredients</label>
                             {form.ingredients?.map((ingredient, index) => (
-                                <input type="text" key={index} value={ingredient} onChange={(e) => handleIngredient(e, index)} />
+                                <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
+                                    <input type="text" value={ingredient} onChange={(e) => handleIngredient(e, index)} />
+                                    <DeleteOutlineIcon className="icon" onClick={() => handleRemoveIngredient(index)} />
+                                </div>
                             ))}
                             <button type="button" style={{ color: "#2F75A1" }} onClick={handleIngredientCount}>Add ingredient</button>
                             <label>Steps</label>
                             {form.steps?.map((step, index) => (
-                                <textarea type="text" key={index} value={step} onChange={(e) => handleStep(e, index)} />
+                                <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
+                                    <textarea value={step} onChange={(e) => handleStep(e, index)} />
+                                    <DeleteOutlineIcon className="icon" onClick={() => handleRemoveStep(index)} />
+                                </div>
                             ))}
                             <button type="button" style={{ color: "#2F75A1" }} onClick={handleStepCount}>Add step</button>
                             <input className="inputfile" type="file" onChange={(e) => setImageUpload(e.target.files[0])} />
