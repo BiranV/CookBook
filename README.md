@@ -1,3 +1,5 @@
+## Live project using Vercel: https://cook-book-client-zeta.vercel.app
+
 ## Available Scripts
 
 **npm i** (server + client folders)
