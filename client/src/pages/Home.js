@@ -70,6 +70,7 @@ const Home = () => {
             steps: [],
             image: "",
         });
+        setImageUpload(null);
     };
 
     const handleEdit = (id) => {
