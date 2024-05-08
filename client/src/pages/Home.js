@@ -312,7 +312,7 @@ const Home = () => {
                             {form.ingredients?.map((ingredient, index) => (
                                 <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
                                     <input type="text" value={ingredient} onChange={(e) => handleIngredient(e, index)} />
-                                    <DeleteOutlineIcon className="icon" onClick={() => handleRemoveIngredient(index)} />
+                                    <DeleteOutlineIcon style={{ cursor: 'pointer' }} className="icon" onClick={() => handleRemoveIngredient(index)} />
                                 </div>
                             ))}
                             <button type="button" style={{ color: "#2F75A1" }} onClick={handleIngredientCount}>Add ingredient</button>
@@ -320,7 +320,7 @@ const Home = () => {
                             {form.steps?.map((step, index) => (
                                 <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
                                     <textarea value={step} onChange={(e) => handleStep(e, index)} />
-                                    <DeleteOutlineIcon className="icon" onClick={() => handleRemoveStep(index)} />
+                                    <DeleteOutlineIcon style={{ cursor: 'pointer' }} className="icon" onClick={() => handleRemoveStep(index)} />
                                 </div>
                             ))}
                             <button type="button" style={{ color: "#2F75A1" }} onClick={handleStepCount}>Add step</button>
