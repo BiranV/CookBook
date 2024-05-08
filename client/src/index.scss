@@ -213,13 +213,14 @@ select {
   }
 
   input[type="text"],
-  textarea[type="text"] {
+  textarea {
     display: block;
     width: 100%;
     padding: 0.5rem;
     resize: vertical;
     max-height: 150px;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
+
   }
 
   input[type="file"].inputfile {
