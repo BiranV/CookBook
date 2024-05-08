@@ -1,7 +1,6 @@
 $white: #fff;
 $black: #000;
 $dark: rgba(100, 129, 135, 255);
-$backgrond-color: #eee;
 $background-snackbar: #4b4b4b;
 $shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 
@@ -13,7 +12,7 @@ $shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 body {
-  background-color: $backgrond-color;
+  background-color: #eee;
   text-align: center;
 }
 
@@ -160,7 +159,7 @@ select {
     margin: 0.3rem 0;
   }
 
-  .popup-container {
+  .popup {
     position: fixed;
     top: 0;
     left: 0;
@@ -173,8 +172,8 @@ select {
     z-index: 10;
     text-align: left;
 
-    .popup-inner {
-      background-color: $backgrond-color;
+    .inner {
+      background-color: #eee;
       padding: 1rem;
       width: 100%;
       max-width: 480px;
@@ -227,7 +226,7 @@ select {
     display: block;
     margin: 1rem 0;
     resize: none;
-    padding-left: 0;
+    padding-left: 0.2rem;
   }
 }
 
@@ -235,7 +234,7 @@ select {
   min-width: 250px;
   margin-left: -125px;
   background-color: $background-snackbar;
-  color: $backgrond-color;
+  color: #eee;
   text-align: center;
   border-radius: 2px;
   padding: 8px;

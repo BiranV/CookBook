@@ -302,8 +302,8 @@ const Home = () => {
                 </div>
             ))}
             {popupState.active && (
-                <div className="popup-container">
-                    <div className="popup-inner">
+                <div className="popup">
+                    <div className="inner">
                         <h2>{popupState.editMode ? "Edit" : "Add"} recipe</h2>
                         <form onSubmit={popupState.editMode ? submitEditRecipe : submitAddRecipe}>
                             <label>Title</label>
