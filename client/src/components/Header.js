@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useGuestMode } from '../context/GuestModeContext';
+import { useAuthMode } from '../context/AuthModeContext';
 
 export default function Header() {
-  const { setGuestMode, guestMode } = useGuestMode();
+  const { setAuthMode, authMode } = useAuthMode();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -16,17 +16,17 @@ export default function Header() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    setGuestMode(true);
+    setAuthMode(false);
     navigate("/")
   };
 
   return (
     <header className="header">
       <Link onClick={() => window.location.href = "/"} className="logo">CookBook</Link>
-      {!isAuthRoute && !guestMode && isLoggedIn && (
+      {!isAuthRoute && authMode && isLoggedIn && (
         <button onClick={handleLogout} className="logout-btn">Log Out</button>
       )}
-      {!isAuthRoute && !isLoggedIn && (
+      {!isAuthRoute && !authMode && (
         <button onClick={handleLogin} className="login-btn">Login</button>
       )}
     </header>

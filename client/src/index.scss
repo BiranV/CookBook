@@ -69,7 +69,7 @@ select {
 
     .btn-login {
       margin: 0.8em 0;
-      color: black; 
+      color: black;
     }
 
     p {
@@ -106,9 +106,7 @@ select {
   }
 
   .logout-btn {
-    background-color: #FFF;
     color: #000;
-    cursor: pointer
   }
 }
 
@@ -116,6 +114,10 @@ select {
   max-width: 800px;
   margin: auto;
   margin-top: 2rem;
+
+  .add-btn {
+    color: #000;
+  }
 
   .card {
     display: flex;
@@ -143,7 +145,7 @@ select {
     }
   }
 
-  .buttons{
+  .buttons {
     margin: 0.5rem 0;
   }
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useGuestMode } from '../context/GuestModeContext';
+import { useAuthMode } from '../context/AuthModeContext';
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { getUserEmailFromToken } from "../utils/authUtils";
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
@@ -16,7 +16,7 @@ const Home = () => {
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams({ filter: "" });
     const filter = searchParams.get("filter");
-    const { setGuestMode, guestMode } = useGuestMode();
+    const { authMode, setAuthMode } = useAuthMode();
 
     const [recipes, setRecipes] = useState([]);
     const [imageUpload, setImageUpload] = useState(null);
@@ -39,32 +39,25 @@ const Home = () => {
     });
 
     useEffect(() => {
-        const checkLoggedIn = async () => {
-            const token = localStorage.getItem("token");
-            if (!token) {
-                setGuestMode(true);
-                return;
-            }
+        const token = localStorage.getItem("token");
+        if (!token) {
+            setAuthMode(false);
+        } else {
+            setAuthMode(true); // Set auth mode to true when there's a token
+        }
+        const fetchData = async () => {
             try {
                 setLoading(true);
-                const response = await axios.get("/", {
-                    headers: {
-                        Authorization: `Bearer ${ token }`,
-                    },
-                    params: {
-                        userEmail: localStorage.getItem("userEmail"),
-                    },
-                });
+                const response = await axios.get("/");
                 setRecipes(response.data);
-                setGuestMode(false);
             } catch (error) {
                 console.error(error.message);
             } finally {
                 setLoading(false);
             }
         };
-        checkLoggedIn();
-    }, [navigate, guestMode]);
+        fetchData();
+    }, [navigate, authMode]);
 
     const handleAdd = () => {
         setPopupState({ active: true, editMode: false });
@@ -152,7 +145,7 @@ const Home = () => {
                     ...recipe,
                     viewing: false,
                 }));
-                setRecipes([...updatedRecipes, updatedRecipe]);
+                setRecipes([updatedRecipe, ...updatedRecipes]);
                 handleSnackbar(response.data.message);
                 setForm({ title: "", ingredients: [], steps: [], image: "" });
                 setPopupState({ ...popupState, active: false });
@@ -195,14 +188,8 @@ const Home = () => {
             const token = localStorage.getItem("token");
             const headers = { Authorization: `Bearer ${ token }` };
             const response = await axios.put(editedForm._id, editedForm, { headers });
-            const updatedRecipe = { ...response.data.obj, viewing: true };
-            const updatedRecipes = recipes.map((recipe) => ({
-                ...recipe,
-                viewing: recipe._id === updatedRecipe._id ? true : false,
-                image: recipe._id === updatedRecipe._id ? updatedRecipe.image : recipe.image
-
-            }));
-            setRecipes(updatedRecipes);
+            const updatedRecipe = { ...response.data.obj };
+            setRecipes(prevRecipes => prevRecipes.map(recipe => recipe._id === updatedRecipe._id ? updatedRecipe : recipe));
             handleSnackbar(response.data.message);
             setForm({ title: "", ingredients: [], steps: [], image: "" });
             setPopupState({ ...popupState, active: false });
@@ -268,8 +255,8 @@ const Home = () => {
 
     return (
         <div className="home-container">
-            {guestMode && <p>You are currently in guest mode. Some functionalities are disabled.</p>}
-            {!guestMode && <button onClick={handleAdd}>Add recipe</button>}
+            {!authMode && <p>You are currently in guest mode. Some functionalities are disabled.</p>}
+            {authMode && <button className="add-btn" onClick={handleAdd}>Add recipe</button>}
             <Filter
                 value={filter}
                 onChange={(e) => setSearchParams((prev) => { prev.set("filter", e.target.value.toLowerCase()); return prev; }, { replace: true })}
@@ -292,7 +279,7 @@ const Home = () => {
                         </div>
                         <div className="buttons">
                             <button style={{ color: "#2F75D1" }} onClick={() => handleView(recipe._id)}>View {recipe.viewing ? "less" : "more"}</button>
-                            {getUserEmailFromToken() === recipe.userEmail && (
+                            {authMode && getUserEmailFromToken() === recipe.userEmail && (
                                 <>
                                     <button style={{ color: "#D07C2E" }} onClick={() => handleEdit(recipe._id, recipe.image)}>Edit</button>
                                     <button style={{ color: "#DB3052" }} onClick={() => handleDelete(recipe)}>Delete</button>

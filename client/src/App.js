@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
-import { GuestModeProvider } from "./context/GuestModeContext";
+import { AuthModeProvider } from "./context/AuthModeContext";
 import Navbar from "./components/Navbar"
 import Home from "./pages/Home"
 import Auth from "./pages/Auth"
@@ -16,8 +16,8 @@ const router = createBrowserRouter([
 ])
 export default function App() {
     return (
-        <GuestModeProvider>
+        <AuthModeProvider>
             <RouterProvider router={router} />
-        </GuestModeProvider>
+        </AuthModeProvider>
     )
 }
