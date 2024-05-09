@@ -127,6 +127,11 @@ select {
     border: none;
     box-shadow: $shadow;
 
+    h5 {
+      margin: 0.25rem 0;
+      font-weight: 100;
+    }
+
     .container-images {
       margin: 0.5rem 0;
 
