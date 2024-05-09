@@ -1,6 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
-import { Provider } from "react-redux";
-import store from './store/index';
+import { GuestModeProvider } from "./context/GuestModeContext";
 import Navbar from "./components/Navbar"
 import Home from "./pages/Home"
 import Auth from "./pages/Auth"
@@ -17,8 +16,8 @@ const router = createBrowserRouter([
 ])
 export default function App() {
     return (
-        <Provider store={store}>
+        <GuestModeProvider>
             <RouterProvider router={router} />
-        </Provider>
+        </GuestModeProvider>
     )
 }

@@ -17,7 +17,7 @@ export default function Auth() {
 
     return (
         <div className="auth">
-            <AuthForm mode={isLogin ? "login" : "signup"} onSuccess={navigateToHome} />
+            <AuthForm mode={isLogin ? "login" : "signup"} onSuccess={navigateToHome} setIsGuestMode={setIsLogin} />
             <label>
                 {isLogin
                     ? "Don't have an account? "

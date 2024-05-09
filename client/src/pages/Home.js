@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useGuestMode } from '../context/GuestModeContext';
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { getUserEmailFromToken } from "../utils/authUtils";
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
@@ -15,6 +16,7 @@ const Home = () => {
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams({ filter: "" });
     const filter = searchParams.get("filter");
+    const { setGuestMode, guestMode } = useGuestMode();
 
     const [recipes, setRecipes] = useState([]);
     const [imageUpload, setImageUpload] = useState(null);
@@ -40,7 +42,7 @@ const Home = () => {
         const checkLoggedIn = async () => {
             const token = localStorage.getItem("token");
             if (!token) {
-                navigate("/auth");
+                setGuestMode(true);
                 return;
             }
             try {
@@ -54,6 +56,7 @@ const Home = () => {
                     },
                 });
                 setRecipes(response.data);
+                setGuestMode(false);
             } catch (error) {
                 console.error(error.message);
             } finally {
@@ -61,7 +64,7 @@ const Home = () => {
             }
         };
         checkLoggedIn();
-    }, [navigate]);
+    }, [navigate, guestMode]);
 
     const handleAdd = () => {
         setPopupState({ active: true, editMode: false });
@@ -265,7 +268,8 @@ const Home = () => {
 
     return (
         <div className="home-container">
-            <button style={{ color: "#3307B6" }} onClick={handleAdd}>Add recipe</button>
+            {guestMode && <p>You are currently in guest mode. Some functionalities are disabled.</p>}
+            {!guestMode && <button onClick={handleAdd}>Add recipe</button>}
             <Filter
                 value={filter}
                 onChange={(e) => setSearchParams((prev) => { prev.set("filter", e.target.value.toLowerCase()); return prev; }, { replace: true })}

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import axios from "../api/axios";
 
-export default function AuthForm({ mode, onSuccess }) {
+export default function AuthForm({ mode, onSuccess, setIsGuestMode }) {
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
     const [loading, setLoading] = useState(false);
@@ -34,6 +34,7 @@ export default function AuthForm({ mode, onSuccess }) {
             if (response && response.data && response.data.token) {
                 const token = response.data.token;
                 localStorage.setItem("token", token);
+                setIsGuestMode(false); // Set guest mode to false after successful login or signup
                 onSuccess();
             } else {
                 console.log("Token not found in response data");
