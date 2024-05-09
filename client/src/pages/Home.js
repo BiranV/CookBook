@@ -302,6 +302,7 @@ const Home = () => {
                     <div className="container-card">
                         <div>
                             <h2>{recipe.title}</h2>
+                            <h5>Updated date: {new Date(recipe.updatedAt).getDate()}/{new Date(recipe.updatedAt).getMonth() + 1}/{new Date(recipe.updatedAt).getFullYear()}</h5>
                         </div>
                         <div>
                             {recipe.viewing && (
