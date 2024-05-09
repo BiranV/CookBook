@@ -145,7 +145,7 @@ const Home = () => {
                     ...recipe,
                     viewing: false,
                 }));
-                setRecipes([updatedRecipe, ...updatedRecipes]);
+                setRecipes([...updatedRecipes, updatedRecipe]);
                 handleSnackbar(response.data.message);
                 setForm({ title: "", ingredients: [], steps: [], image: "" });
                 setPopupState({ ...popupState, active: false });
