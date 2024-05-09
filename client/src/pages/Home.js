@@ -19,14 +19,15 @@ const Home = () => {
     const { authMode, setAuthMode } = useAuthMode();
 
     const [recipes, setRecipes] = useState([]);
-    const [imageUpload, setImageUpload] = useState(null);
-    const [imageUrl, setImageUrl] = useState("");
+    const [imagesUpload, setImagesUpload] = useState([]);
+    const [imageUrl, setImageUrl] = useState([]);
+    const [imagesUrls, setImagesUrls] = useState([]);
     const [popupImage, setPopupImage] = useState(false);
     const [form, setForm] = useState({
         title: "",
         ingredients: [],
         steps: [],
-        image: ""
+        images: []
     });
     const [loading, setLoading] = useState(false);
     const [popupState, setPopupState] = useState({
@@ -59,55 +60,6 @@ const Home = () => {
         fetchData();
     }, [navigate, authMode]);
 
-    const handleAdd = () => {
-        setPopupState({ active: true, editMode: false });
-        setForm({
-            title: "",
-            ingredients: [],
-            steps: [],
-            image: "",
-        });
-    };
-
-    const handleEdit = (id) => {
-        const recipe = recipes.find((recipe) => recipe._id === id);
-        if (recipe) {
-            if (recipe.userEmail !== getUserEmailFromToken()) {
-                alert("You are not authorized to edit this recipe.");
-                return;
-            }
-            setForm({ ...recipe });
-            setImageUrl(recipe.image);
-            setPopupState({ active: true, editMode: true });
-        }
-    };
-
-    const handleDelete = async (recipe) => {
-        const result = window.confirm(`Are you sure want to delete ${ recipe.title } recipe?`);
-        if (!result) return;
-        try {
-            const token = localStorage.getItem("token");
-            const headers = {
-                Authorization: `Bearer ${ token }`,
-            };
-
-            // Check if the logged-in user is the creator of the recipe
-            if (recipe.userEmail !== getUserEmailFromToken()) {
-                alert("You are not authorized to delete this recipe.");
-                return;
-            }
-
-            const imageRef = ref(storage, recipe.image);
-            await deleteObject(imageRef);
-
-            const response = await axios.delete("/" + recipe._id, { headers });
-            setRecipes((prevRecipes) => prevRecipes.filter((prevRecipe) => prevRecipe._id !== recipe._id));
-            handleSnackbar(response.data.message);
-        } catch (error) {
-            console.error(error.message);
-        }
-    };
-
     const handleView = (id) => {
         setRecipes((prevRecipes) =>
             prevRecipes.map((recipe) => ({
@@ -117,19 +69,42 @@ const Home = () => {
         );
     };
 
-    const submitAddRecipe = async (e) => {
+    const handleFileInputChange = (e) => {
+        setImagesUpload(Array.from(e.target.files));
+    }
+
+    const handleAdd = () => {
+        setPopupState({ active: true, editMode: false });
+        setForm({
+            title: "",
+            ingredients: [],
+            steps: [],
+            images: [],
+        });
+    };
+
+    const submitAdd = async (e) => {
         e.preventDefault();
 
-        if (!form.title || form.ingredients.some(ingredient => !ingredient.trim()) || form.steps.some(step => !step.trim()) || !imageUpload || form.ingredients.length < 1 || form.steps.length < 1) {
+        if (!form.title || form.ingredients.some(ingredient => !ingredient.trim()) || form.steps.some(step => !step.trim()) || !imagesUpload || form.ingredients.length < 1 || form.steps.length < 1) {
             alert("Please fill out all fields");
             return;
         }
         setLoading(true);
         try {
-            const imageRef = ref(storage, `images/${ uuidv4() }`);
-            await uploadBytes(imageRef, imageUpload);
-            const imageUrl = await getDownloadURL(imageRef);
-            const updatedForm = { ...form, image: imageUrl };
+
+            const imageRefs = Array.from({ length: imagesUpload.length }, () => ref(storage, `images/${ uuidv4() }`));
+
+            await Promise.all(imagesUpload.map(async (file, index) => {
+                await uploadBytes(imageRefs[index], file);
+            }));
+
+            const imagesUrls = await Promise.all(imageRefs.map(async (imageRef) => {
+                return await getDownloadURL(imageRef);
+            }));
+
+            const updatedForm = { ...form, images: imagesUrls };
+
             try {
                 const token = localStorage.getItem("token");
                 if (!token) {
@@ -147,8 +122,9 @@ const Home = () => {
                 }));
                 setRecipes([...updatedRecipes, updatedRecipe]);
                 handleSnackbar(response.data.message);
-                setForm({ title: "", ingredients: [], steps: [], image: "" });
+                setForm({ title: "", ingredients: [], steps: [], images: [] });
                 setPopupState({ ...popupState, active: false });
+                setImagesUpload([])
             } catch (error) {
                 console.error(error.message);
             }
@@ -159,44 +135,104 @@ const Home = () => {
         setLoading(false);
     };
 
-    const submitEditRecipe = async (e) => {
+    const handleEdit = (id) => {
+        const recipe = recipes.find((recipe) => recipe._id === id);
+        if (recipe) {
+            if (recipe.userEmail !== getUserEmailFromToken()) {
+                alert("You are not authorized to edit this recipe.");
+                return;
+            }
+            setForm({ ...recipe });
+            setImagesUrls(recipe.images);
+            setPopupState({ active: true, editMode: true });
+        }
+    };
+
+    const submitEdit = async (e) => {
         e.preventDefault();
 
         if (!form.title || form.ingredients.some(ingredient => !ingredient.trim()) || form.steps.some(step => !step.trim()) || form.ingredients.length < 1 || form.steps.length < 1) {
             alert("Please fill out all fields");
             return;
         }
+
         setLoading(true);
         const editedForm = { ...form };
+
         try {
-            if (imageUpload) {
-                const previousImageRef = ref(storage, editedForm.image);
-                try {
-                    await deleteObject(previousImageRef);
-                } catch (error) {
-                    console.error('Error deleting previous image:', error);
-                }
-                const newImageRef = ref(storage, `images/${ uuidv4() }`);
-                try {
-                    await uploadBytes(newImageRef, imageUpload);
-                    const imageUrl = await getDownloadURL(newImageRef);
-                    editedForm.image = imageUrl;
-                } catch (error) {
-                    console.error('Error uploading new image:', error);
-                }
-            }
             const token = localStorage.getItem("token");
             const headers = { Authorization: `Bearer ${ token }` };
+
+            if (imagesUpload.length > 0) {
+                // Upload new images and get their download URLs
+                const newImageRefs = Array.from({ length: imagesUpload.length }, () => ref(storage, `images/${ uuidv4() }`));
+
+                await Promise.all(imagesUpload.map(async (file, index) => {
+                    await uploadBytes(newImageRefs[index], file);
+                }));
+
+                const newImageUrls = await Promise.all(newImageRefs.map(async (imageRef) => {
+                    return await getDownloadURL(imageRef);
+                }));
+
+                // Delete previous images
+                const previousImageRefs = form.images.map(imageUrl => ref(storage, imageUrl));
+                await Promise.all(previousImageRefs.map(async (imageRef) => {
+                    try {
+                        await deleteObject(imageRef);
+                    } catch (error) {
+                        console.error('Error deleting previous image:', error);
+                    }
+                }));
+
+                editedForm.images = newImageUrls;
+            }
             const response = await axios.put(editedForm._id, editedForm, { headers });
             const updatedRecipe = { ...response.data.obj };
             setRecipes(prevRecipes => prevRecipes.map(recipe => recipe._id === updatedRecipe._id ? updatedRecipe : recipe));
             handleSnackbar(response.data.message);
-            setForm({ title: "", ingredients: [], steps: [], image: "" });
+            setForm({ title: "", ingredients: [], steps: [], images: [] });
             setPopupState({ ...popupState, active: false });
+            setImagesUpload([])
         } catch (error) {
-            console.error('Error updating movie:', error);
+            console.error('Error updating recipe:', error);
         }
         setLoading(false);
+    };
+
+    const submitDelete = async (recipe) => {
+        const result = window.confirm(`Are you sure want to delete ${ recipe.title } recipe?`);
+        if (!result) return;
+
+        try {
+            const token = localStorage.getItem("token");
+            const headers = {
+                Authorization: `Bearer ${ token }`,
+            };
+
+            // Check if the logged-in user is the creator of the recipe
+            if (recipe.userEmail !== getUserEmailFromToken()) {
+                alert("You are not authorized to delete this recipe.");
+                return;
+            }
+
+            const imageRefs = recipe.images.map(imageUrl => ref(storage, imageUrl));
+
+            // Delete images concurrently
+            await Promise.all(imageRefs.map(async (imageRef) => {
+                try {
+                    await deleteObject(imageRef);
+                } catch (error) {
+                    console.error('Error deleting image:', error);
+                }
+            }));
+
+            const response = await axios.delete("/" + recipe._id, { headers });
+            setRecipes((prevRecipes) => prevRecipes.filter((prevRecipe) => prevRecipe._id !== recipe._id));
+            handleSnackbar(response.data.message);
+        } catch (error) {
+            console.error(error.message);
+        }
     };
 
     const handleTitle = (e) => {
@@ -242,8 +278,8 @@ const Home = () => {
         }, 2000);
     };
 
-    const openFullImage = (val) => {
-        setImageUrl(val);
+    const openFullImage = (url) => {
+        setImageUrl(url);
         setPopupImage(true);
     };
 
@@ -277,18 +313,21 @@ const Home = () => {
                                 </div>
                             )}
                         </div>
-                        <div className="buttons">
+                        <div className="container-images">
+                            {recipe.images.map((image, index) => (
+
+                                <img key={index} src={image} alt="uploaded img" onClick={() => { openFullImage(image); }} />
+                            ))}
+                        </div>
+                        <div className="container-buttons">
                             <button style={{ color: "#2F75D1" }} onClick={() => handleView(recipe._id)}>View {recipe.viewing ? "less" : "more"}</button>
                             {authMode && getUserEmailFromToken() === recipe.userEmail && (
                                 <>
-                                    <button style={{ color: "#D07C2E" }} onClick={() => handleEdit(recipe._id, recipe.image)}>Edit</button>
-                                    <button style={{ color: "#DB3052" }} onClick={() => handleDelete(recipe)}>Delete</button>
+                                    <button style={{ color: "#D07C2E" }} onClick={() => handleEdit(recipe._id)}>Edit</button>
+                                    <button style={{ color: "#DB3052" }} onClick={() => submitDelete(recipe)}>Delete</button>
                                 </>
                             )}
                         </div>
-                    </div>
-                    <div className="container-image">
-                        <img src={recipe.image} alt="uploaded img" onClick={() => { openFullImage(recipe.image); }} />
                     </div>
                 </div>
             ))}
@@ -296,7 +335,7 @@ const Home = () => {
                 <div className="popup">
                     <div className="inner">
                         <h2>{popupState.editMode ? "Edit" : "Add"} recipe</h2>
-                        <form onSubmit={popupState.editMode ? submitEditRecipe : submitAddRecipe}>
+                        <form onSubmit={popupState.editMode ? submitEdit : submitAdd}>
                             <label>Title</label>
                             <input name="title" type="text" value={form.title} onChange={handleTitle} />
                             <label>Ingredients</label>
@@ -315,9 +354,11 @@ const Home = () => {
                                 </div>
                             ))}
                             <button type="button" style={{ color: "#2F75A1" }} onClick={handleStepCount}>Add step</button>
-                            <input className="inputfile" type="file" onChange={(e) => setImageUpload(e.target.files[0])} />
+                            <input className="inputfile" type="file" onChange={handleFileInputChange} multiple />
                             <div className="container-image">
-                                {form.image && <img alt="uploaded img" src={form.image} />}
+                                {form.images && form.images.map((image, index) => (
+                                    <img key={index} alt="uploaded img" src={image} />
+                                ))}
                             </div>
                             <button type="submit" disabled={loading} style={{ color: "#00905B" }}>Submit</button>
                             <button type="button" style={{ color: "#DB3052" }} onClick={() => setPopupState({ ...popupState, active: false })}>Close</button>

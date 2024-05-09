@@ -13,8 +13,8 @@ const recipeSchema = new mongoose.Schema({
         type: Array,
         required: true
     },
-    image: {
-        type: String,
+    images: {
+        type: Array,
         required: true
     },
     userEmail: {
