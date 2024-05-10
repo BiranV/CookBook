@@ -321,11 +321,11 @@ const Home = () => {
                             ))}
                         </div>
                         <div className="container-buttons">
-                            <button style={{ color: "#2F75D1" }} onClick={() => handleView(recipe._id)}>View {recipe.viewing ? "less" : "more"}</button>
+                            <button className="view-btn" onClick={() => handleView(recipe._id)}>View {recipe.viewing ? "less" : "more"}</button>
                             {authMode && getUserEmailFromToken() === recipe.userEmail && (
                                 <>
-                                    <button style={{ color: "#D07C2E" }} onClick={() => handleEdit(recipe._id)}>Edit</button>
-                                    <button style={{ color: "#DB3052" }} onClick={() => submitDelete(recipe)}>Delete</button>
+                                    <button className="edit-btn" onClick={() => handleEdit(recipe._id)}>Edit</button>
+                                    <button className="delete-btn" onClick={() => submitDelete(recipe)}>Delete</button>
                                 </>
                             )}
                         </div>
@@ -346,7 +346,7 @@ const Home = () => {
                                     <DeleteOutlineIcon style={{ cursor: 'pointer' }} className="icon" onClick={() => handleRemoveIngredient(index)} />
                                 </div>
                             ))}
-                            <button type="button" style={{ color: "#2F75A1" }} onClick={handleIngredientCount}>Add ingredient</button>
+                            <button className="add-btn" type="button" onClick={handleIngredientCount}>Add ingredient</button>
                             <label>Steps</label>
                             {form.steps?.map((step, index) => (
                                 <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
@@ -354,15 +354,15 @@ const Home = () => {
                                     <DeleteOutlineIcon style={{ cursor: 'pointer' }} className="icon" onClick={() => handleRemoveStep(index)} />
                                 </div>
                             ))}
-                            <button type="button" style={{ color: "#2F75A1" }} onClick={handleStepCount}>Add step</button>
+                            <button className="add-btn" type="button" onClick={handleStepCount}>Add step</button>
                             <input className="inputfile" type="file" onChange={handleFileInputChange} multiple />
                             <div className="container-image">
                                 {form.images && form.images.map((image, index) => (
                                     <img key={index} alt="uploaded img" src={image} />
                                 ))}
                             </div>
-                            <button type="submit" disabled={loading} style={{ color: "#00905B" }}>Submit</button>
-                            <button type="button" style={{ color: "#DB3052" }} onClick={() => setPopupState({ ...popupState, active: false })}>Close</button>
+                            <button className="submit-btn" type="submit" disabled={loading}>Submit</button>
+                            <button className="close-btn" type="button" onClick={() => setPopupState({ ...popupState, active: false })}>Close</button>
                         </form>
                     </div>
                 </div>
