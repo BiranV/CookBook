@@ -64,7 +64,7 @@ const Home = () => {
         setRecipes((prevRecipes) =>
             prevRecipes.map((recipe) => ({
                 ...recipe,
-                viewing: recipe._id === id ? !recipe.viewing : false,
+                viewing: recipe._id === id ? true : recipe.viewing,
             }))
         );
     };
