@@ -21,7 +21,6 @@ const Home = () => {
     const [recipes, setRecipes] = useState([]);
     const [imagesUpload, setImagesUpload] = useState([]);
     const [imageUrl, setImageUrl] = useState([]);
-    const [imagesUrls, setImagesUrls] = useState([]);
     const [popupImage, setPopupImage] = useState(false);
     const [form, setForm] = useState({
         title: "",
@@ -41,11 +40,8 @@ const Home = () => {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-        if (!token) {
-            setAuthMode(false);
-        } else {
-            setAuthMode(true); // Set auth mode to true when there's a token
-        }
+        setAuthMode(!!token);
+
         const fetchData = async () => {
             try {
                 setLoading(true);
@@ -57,6 +53,7 @@ const Home = () => {
                 setLoading(false);
             }
         };
+
         fetchData();
     }, [navigate, authMode]);
 
@@ -64,7 +61,7 @@ const Home = () => {
         setRecipes((prevRecipes) =>
             prevRecipes.map((recipe) => ({
                 ...recipe,
-                viewing: recipe._id === id ? true : recipe.viewing,
+                viewing: recipe._id === id ? !recipe.viewing : recipe.viewing,
             }))
         );
     };
@@ -143,7 +140,6 @@ const Home = () => {
                 return;
             }
             setForm({ ...recipe });
-            setImagesUrls(recipe.images);
             setPopupState({ active: true, editMode: true });
         }
     };
