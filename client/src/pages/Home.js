@@ -296,37 +296,31 @@ const Home = () => {
             />
             {recipesFiltered.map((recipe) => (
                 <div className="card" key={recipe._id}>
-                    <div className="container-card">
+                    <h2>{recipe.title}</h2>
+                    <h5>Updated date: {new Date(recipe.updatedAt).getDate()}/{new Date(recipe.updatedAt).getMonth() + 1}/{new Date(recipe.updatedAt).getFullYear()}</h5>
+                    {recipe.viewing && (
                         <div>
-                            <h2>{recipe.title}</h2>
-                            <h5>Updated date: {new Date(recipe.updatedAt).getDate()}/{new Date(recipe.updatedAt).getMonth() + 1}/{new Date(recipe.updatedAt).getFullYear()}</h5>
+                            <label>Ingredients</label>
+                            <ul>{recipe.ingredients.map((ingredient, index) => (<li key={index}>{ingredient}</li>))}</ul>
+                            <label>Steps</label>
+                            <ol>{recipe.steps.map((step, index) => (<li key={index}>{step}</li>))}</ol>
                         </div>
-                        <div>
-                            {recipe.viewing && (
-                                <div>
-                                    <label>Ingredients</label>
-                                    <ul>{recipe.ingredients.map((ingredient, index) => (<li key={index}>{ingredient}</li>))}</ul>
-                                    <label>Steps</label>
-                                    <ol>{recipe.steps.map((step, index) => (<li key={index}>{step}</li>))}</ol>
-                                </div>
-                            )}
-                        </div>
-                        <div className="container-images">
-                            {recipe.images.map((image, index) => (
+                    )}
+                    <div className="container-images">
+                        {recipe.images.map((image, index) => (
 
-                                <img key={index} src={image} alt="uploaded img" onClick={() => { openFullImage(image); }} />
-                            ))}
-                        </div>
-                        <div className="container-buttons">
-                            <button className="view-btn" onClick={() => handleView(recipe._id)}>View {recipe.viewing ? "less" : "more"}</button>
-                            {authMode && getUserEmailFromToken() === recipe.userEmail && (
-                                <>
-                                    <button className="edit-btn" onClick={() => handleEdit(recipe._id)}>Edit</button>
-                                    <button className="delete-btn" onClick={() => submitDelete(recipe)}>Delete</button>
-                                </>
-                            )}
-                            <RecipeExport recipe={recipe} />
-                        </div>
+                            <img key={index} src={image} alt="uploaded img" onClick={() => { openFullImage(image); }} />
+                        ))}
+                    </div>
+                    <div className="container-buttons">
+                        <button className="view-btn" onClick={() => handleView(recipe._id)}>View {recipe.viewing ? "less" : "more"}</button>
+                        {authMode && getUserEmailFromToken() === recipe.userEmail && (
+                            <>
+                                <button className="edit-btn" onClick={() => handleEdit(recipe._id)}>Edit</button>
+                                <button className="delete-btn" onClick={() => submitDelete(recipe)}>Delete</button>
+                            </>
+                        )}
+                        <RecipeExport recipe={recipe} />
                     </div>
                 </div>
             ))}
@@ -363,8 +357,10 @@ const Home = () => {
                                     </span>
                                 ))}
                             </div>
-                            <button className="submit-btn" type="submit" disabled={loading}>Submit</button>
-                            <button className="close-btn" type="button" onClick={() => setPopupState({ ...popupState, active: false })}>Close</button>
+                            <div className="container-buttons">
+                                <button className="submit-btn" type="submit" disabled={loading}>Submit</button>
+                                <button className="close-btn" type="button" onClick={() => setPopupState({ ...popupState, active: false })}>Close</button>
+                            </div>
                         </form>
                     </div>
                 </div>

@@ -26,7 +26,6 @@ button {
   opacity: 0.7;
   transition: 0.3s;
   background-color: $white;
-  margin: 0 0.5rem 0 0;
 
   &:hover {
     opacity: 1;
@@ -139,7 +138,7 @@ select {
   }
 
   .card {
-    background-color: $white;
+    background-color: #FFF;
     padding: 1rem;
     margin: 1rem 0;
     text-align: left;
@@ -151,54 +150,63 @@ select {
       font-weight: 100;
     }
 
-    .view-btn {
-      color: #2F75D1;
-      border-color: #2F75D1;
-      width: 100px;
+    .container-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
 
-      &:hover {
-        background-color: #2F75D1;
+      /* Adjust the value to your preference */
+      .view-btn {
+        color: #2F75D1;
         border-color: #2F75D1;
-        color: #fff
+        width: 100px;
+
+        &:hover {
+          background-color: #2F75D1;
+          border-color: #2F75D1;
+          color: #fff
+        }
       }
-    }
 
-    .edit-btn {
-      color: #D07C2E;
-      border-color: #D07C2E;
-      width: 100px;
-
-      &:hover {
-        background-color: #D07C2E;
+      .edit-btn {
+        color: #D07C2E;
         border-color: #D07C2E;
-        color: #fff
+        width: 100px;
+
+        &:hover {
+          background-color: #D07C2E;
+          border-color: #D07C2E;
+          color: #fff
+        }
       }
-    }
 
-    .delete-btn {
-      color: #DB3052;
-      border-color: #DB3052;
-      width: 100px;
-
-      &:hover {
-        background-color: #DB3052;
+      .delete-btn {
+        color: #DB3052;
         border-color: #DB3052;
-        color: #fff
+        width: 100px;
+
+        &:hover {
+          background-color: #DB3052;
+          border-color: #DB3052;
+          color: #fff
+        }
+
       }
 
-    }
-
-    .pdf-btn {
-      color: #252525;
-      border-color: #252525;
-      width: 100px;
-
-      &:hover {
-        background-color: #252525;
+      .pdf-btn {
+        color: #252525;
         border-color: #252525;
-        color: #fff
+        width: 100px;
+
+        &:hover {
+          background-color: #252525;
+          border-color: #252525;
+          color: #fff
+        }
       }
     }
+
+
 
     .container-images {
       margin: 0.5rem 0;
@@ -258,6 +266,18 @@ select {
         color: #676767;
       }
 
+      .add-btn {
+        color: #2F75A1;
+        border-color: #2F75A1;
+        width: 120px;
+
+        &:hover {
+          background-color: #2F75A1;
+          border-color: #2F75A1;
+          color: #fff
+        }
+      }
+
       .container-image {
         display: flex;
         flex-wrap: wrap;
@@ -289,44 +309,38 @@ select {
         }
       }
 
-      .add-btn {
-        color: #2F75A1;
-        border-color: #2F75A1;
-        width: 120px;
+      .container-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
 
-        &:hover {
-          background-color: #2F75A1;
-          border-color: #2F75A1;
-          color: #fff
-        }
-      }
-
-      .submit-btn {
-        color: #00905B;
-        border-color: #00905B;
-        width: 100px;
-
-        &:hover {
-          background-color: #00905B;
+        .submit-btn {
+          color: #00905B;
           border-color: #00905B;
-          color: #fff
+          width: 100px;
+
+          &:hover {
+            background-color: #00905B;
+            border-color: #00905B;
+            color: #fff
+          }
         }
-      }
 
-      .close-btn {
-        color: #DB3052;
-        border-color: #DB3052;
-        width: 100px;
-
-        &:hover {
-          background-color: #DB3052;
+        .close-btn {
+          color: #DB3052;
           border-color: #DB3052;
-          color: #fff
-        }
-      }
+          width: 100px;
 
-      .icon {
-        cursor: pointer
+          &:hover {
+            background-color: #DB3052;
+            border-color: #DB3052;
+            color: #fff
+          }
+        }
+
+        .icon {
+          cursor: pointer
+        }
       }
     }
 
