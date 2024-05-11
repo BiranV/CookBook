@@ -21,6 +21,7 @@ const Home = () => {
     const [recipes, setRecipes] = useState([]);
     const [imagesUpload, setImagesUpload] = useState([]);
     const [imageUrl, setImageUrl] = useState([]);
+    const [previousImagesUrls, setPreviousImagesUrls] = useState([]);
     const [popupImage, setPopupImage] = useState(false);
     const [form, setForm] = useState({
         title: "",
@@ -65,10 +66,6 @@ const Home = () => {
             }))
         );
     };
-
-    const handleFileInputChange = (e) => {
-        setImagesUpload(Array.from(e.target.files));
-    }
 
     const handleAdd = () => {
         setPopupState({ active: true, editMode: false });
@@ -140,15 +137,21 @@ const Home = () => {
                 return;
             }
             setForm({ ...recipe });
+            setPreviousImagesUrls([...recipe.images]);
             setPopupState({ active: true, editMode: true });
         }
     };
-
     const submitEdit = async (e) => {
         e.preventDefault();
 
         if (!form.title || form.ingredients.some(ingredient => !ingredient.trim()) || form.steps.some(step => !step.trim()) || form.ingredients.length < 1 || form.steps.length < 1) {
             alert("Please fill out all fields");
+            return;
+        }
+
+        const remainingImages = form.images.length - imagesUpload.length;
+        if (remainingImages === 0) {
+            alert("Please keep at least one existing image or upload a new one");
             return;
         }
 
@@ -171,18 +174,21 @@ const Home = () => {
                     return await getDownloadURL(imageRef);
                 }));
 
-                // Delete previous images
-                const previousImageRefs = form.images.map(imageUrl => ref(storage, imageUrl));
-                await Promise.all(previousImageRefs.map(async (imageRef) => {
-                    try {
-                        await deleteObject(imageRef);
-                    } catch (error) {
-                        console.error('Error deleting previous image:', error);
-                    }
-                }));
-
-                editedForm.images = newImageUrls;
+                editedForm.images = [...editedForm.images, ...newImageUrls];
             }
+
+            // Identify removed images
+            const removedImagesUrls = previousImagesUrls.filter(prevImageUrl => !editedForm.images.includes(prevImageUrl));
+
+            await Promise.all(removedImagesUrls.map(async (removedImageUrl) => {
+                try {
+                    const imageRef = ref(storage, removedImageUrl);
+                    await deleteObject(imageRef);
+                } catch (error) {
+                    console.error('Error deleting image:', error);
+                }
+            }));
+
             const response = await axios.put(editedForm._id, editedForm, { headers });
             const updatedRecipe = { ...response.data.obj };
             setRecipes(prevRecipes => prevRecipes.map(recipe => recipe._id === updatedRecipe._id ? updatedRecipe : recipe));
@@ -231,18 +237,10 @@ const Home = () => {
         }
     };
 
-    const handleTitle = (e) => {
-        setForm({ ...form, title: e.target.value });
-    };
-
     const handleIngredient = (e, index) => {
         const ingredientsClone = [...form.ingredients];
         ingredientsClone[index] = e.target.value;
         setForm({ ...form, ingredients: ingredientsClone });
-    };
-
-    const handleIngredientCount = () => {
-        setForm({ ...form, ingredients: [...form.ingredients, ""] });
     };
 
     const handleRemoveIngredient = (index) => {
@@ -257,14 +255,16 @@ const Home = () => {
         setForm({ ...form, steps: stepsClone });
     };
 
-    const handleStepCount = () => {
-        setForm({ ...form, steps: [...form.steps, ""] });
-    };
-
     const handleRemoveStep = (index) => {
         const stepsClone = [...form.steps];
         stepsClone.splice(index, 1);
         setForm({ ...form, steps: stepsClone });
+    };
+
+    const handleRemoveImage = (index) => {
+        const updatedImages = [...form.images];
+        updatedImages.splice(index, 1);
+        setForm({ ...form, images: updatedImages });
     };
 
     const handleSnackbar = (val) => {
@@ -334,7 +334,7 @@ const Home = () => {
                         <h2>{popupState.editMode ? "Edit" : "Add"} recipe</h2>
                         <form onSubmit={popupState.editMode ? submitEdit : submitAdd}>
                             <label>Title</label>
-                            <input name="title" type="text" value={form.title} onChange={handleTitle} />
+                            <input name="title" type="text" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
                             <label>Ingredients</label>
                             {form.ingredients?.map((ingredient, index) => (
                                 <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
@@ -342,7 +342,7 @@ const Home = () => {
                                     <DeleteOutlineIcon className="icon" onClick={() => handleRemoveIngredient(index)} />
                                 </div>
                             ))}
-                            <button className="add-btn" type="button" onClick={handleIngredientCount}>Add ingredient</button>
+                            <button className="add-btn" type="button" onClick={() => setForm({ ...form, ingredients: [...form.ingredients, ""] })}>Add ingredient</button>
                             <label>Steps</label>
                             {form.steps?.map((step, index) => (
                                 <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
@@ -350,11 +350,15 @@ const Home = () => {
                                     <DeleteOutlineIcon className="icon" onClick={() => handleRemoveStep(index)} />
                                 </div>
                             ))}
-                            <button className="add-btn" type="button" onClick={handleStepCount}>Add step</button>
-                            <input className="inputfile" type="file" onChange={handleFileInputChange} multiple />
+                            <button className="add-btn" type="button" onClick={() => setForm({ ...form, steps: [...form.steps, ""] })
+                            }>Add step</button>
+                            <input className="inputfile" type="file" onChange={(e) => setImagesUpload(Array.from(e.target.files))} multiple />
                             <div className="container-image">
                                 {form.images && form.images.map((image, index) => (
-                                    <img key={index} alt="uploaded img" src={image} />
+                                    <span key={index} className="image-container">
+                                        <img key={index} alt="uploaded img" src={image} />
+                                        <DeleteOutlineIcon className="icon" onClick={() => handleRemoveImage(index)} />
+                                    </span>
                                 ))}
                             </div>
                             <button className="submit-btn" type="submit" disabled={loading}>Submit</button>
