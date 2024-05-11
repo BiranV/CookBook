@@ -11,6 +11,7 @@ import Filter from "../components/Filter";
 import Spinner from "../components/Spinner";
 import Snackbar from "../components/Snackbar";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import RecipeExport from '../components/RecipeExport';
 
 const Home = () => {
     const navigate = useNavigate();
@@ -324,6 +325,7 @@ const Home = () => {
                                     <button className="delete-btn" onClick={() => submitDelete(recipe)}>Delete</button>
                                 </>
                             )}
+                            <RecipeExport recipe={recipe} />
                         </div>
                     </div>
                 </div>

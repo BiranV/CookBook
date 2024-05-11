@@ -185,6 +185,19 @@ select {
         border-color: #DB3052;
         color: #fff
       }
+
+    }
+
+    .pdf-btn {
+      color: #252525;
+      border-color: #252525;
+      width: 100px;
+
+      &:hover {
+        background-color: #252525;
+        border-color: #252525;
+        color: #fff
+      }
     }
 
     .container-images {
