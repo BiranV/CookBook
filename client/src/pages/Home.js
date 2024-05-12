@@ -323,7 +323,7 @@ const Home = () => {
                     )}
                     <div className="container-images">
                         {recipe.images.map((image, index) => (
-                            <img key={index} src={image} alt="uploaded img" onClick={() => { openFullImage(image); }} />
+                            <img key={index} src={image} alt="uploaded img" onClick={() => { openFullImage(image) }} />
                         ))}
                     </div>
                     <div className="container-buttons">
@@ -366,7 +366,7 @@ const Home = () => {
                             <div className="container-image">
                                 {form.images && form.images.map((image, index) => (
                                     <span key={index} className="image-container">
-                                        <img key={index} alt="uploaded img" src={image} />
+                                        <img onClick={() => { openFullImage(image) }} key={index} alt="uploaded img" src={image} />
                                         <DeleteOutlineIcon className="icon" onClick={() => handleRemoveImage(index)} />
                                     </span>
                                 ))}
