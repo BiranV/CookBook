@@ -12,6 +12,8 @@ import Spinner from "../components/Spinner";
 import Snackbar from "../components/Snackbar";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import RecipeExport from '../components/RecipeExport';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Home = () => {
     const navigate = useNavigate();
@@ -82,12 +84,12 @@ const Home = () => {
         e.preventDefault();
 
         if (!form.title || form.ingredients.some(ingredient => !ingredient.trim()) || form.steps.some(step => !step.trim()) || !imagesUpload || form.ingredients.length < 1 || form.steps.length < 1) {
-            alert("Please fill out all fields");
+            toast("Please fill out all fields");
             return;
         }
         const remainingImages = form.images.length - imagesUpload.length;
         if (remainingImages === 0) {
-            alert("Please add at least one image");
+            toast("Please add at least one image");
             return;
         }
 
@@ -140,7 +142,7 @@ const Home = () => {
         const recipe = recipes.find((recipe) => recipe._id === id);
         if (recipe) {
             if (recipe.userEmail !== getUserEmailFromToken()) {
-                alert("You are not authorized to edit this recipe.");
+                toast("You are not authorized to edit this recipe.");
                 return;
             }
             setForm({ ...recipe });
@@ -152,13 +154,13 @@ const Home = () => {
         e.preventDefault();
 
         if (!form.title || form.ingredients.some(ingredient => !ingredient.trim()) || form.steps.some(step => !step.trim()) || form.ingredients.length < 1 || form.steps.length < 1) {
-            alert("Please fill out all fields");
+            toast("Please fill out all fields");
             return;
         }
 
         const remainingImages = form.images.length - imagesUpload.length;
         if (remainingImages === 0) {
-            alert("Please keep at least one existing image or upload a new one");
+            toast("Please keep at least one existing image or upload a new one");
             return;
         }
 
@@ -221,7 +223,7 @@ const Home = () => {
 
             // Check if the logged-in user is the creator of the recipe
             if (recipe.userEmail !== getUserEmailFromToken()) {
-                alert("You are not authorized to delete this recipe.");
+                toast("You are not authorized to delete this recipe.");
                 return;
             }
 
@@ -294,6 +296,12 @@ const Home = () => {
 
     return (
         <div className="home-container">
+            <ToastContainer
+                position="top-center"
+                autoClose={2000}
+                closeOnClick
+                rtl={false}
+            />
             {!authMode && <p>You are currently in guest mode. Some functionalities are disabled.</p>}
             {authMode && <button className="add-btn" onClick={handleAdd}>Add recipe</button>}
             <Filter
