@@ -22,7 +22,7 @@ export default function Header() {
 
   return (
     <header className="header">
-      <Link onClick={() => window.location.href = "/"} className="logo">CookBook</Link>
+      <Link to="/" className="logo">CookBook</Link>
       {!isAuthRoute && authMode && isLoggedIn && (
         <button onClick={handleLogout} className="logout">Log Out</button>
       )}
