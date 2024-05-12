@@ -295,7 +295,7 @@ const Home = () => {
     }
 
     return (
-        <div className="home-container">
+        <div className="home">
             <ToastContainer
                 position="top-center"
                 autoClose={2000}
@@ -305,6 +305,7 @@ const Home = () => {
             {!authMode && <p>You are currently in guest mode. Some functionalities are disabled.</p>}
             {authMode && <button className="add-btn" onClick={handleAdd}>Add recipe</button>}
             <Filter
+                className="filter"
                 value={filter}
                 onChange={(e) => setSearchParams((prev) => { prev.set("filter", e.target.value.toLowerCase()); return prev; }, { replace: true })}
             />
@@ -322,7 +323,6 @@ const Home = () => {
                     )}
                     <div className="container-images">
                         {recipe.images.map((image, index) => (
-
                             <img key={index} src={image} alt="uploaded img" onClick={() => { openFullImage(image); }} />
                         ))}
                     </div>

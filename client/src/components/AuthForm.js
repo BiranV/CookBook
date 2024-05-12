@@ -3,7 +3,7 @@ import { useAuthMode } from '../context/AuthModeContext';
 import axios from "../api/axios";
 
 export default function AuthForm({ mode, onSuccess }) {
-    const { authMode, setAuthMode } = useAuthMode();
+    const { setAuthMode } = useAuthMode();
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
     const [loading, setLoading] = useState(false);
@@ -65,7 +65,7 @@ export default function AuthForm({ mode, onSuccess }) {
                     {loading ? `${ mode === "login" ? "Logging in..." : "Signing up..." }` : `${ mode === "login" ? "Login" : "Signup" }`}
                 </button>
                 {error && (
-                    <p>{error}</p>
+                    <p className="error">{error}</p>
                 )}
             </form>
         </div>
