@@ -85,6 +85,12 @@ const Home = () => {
             alert("Please fill out all fields");
             return;
         }
+        const remainingImages = form.images.length - imagesUpload.length;
+        if (remainingImages === 0) {
+            alert("Please add at least one image");
+            return;
+        }
+
         setLoading(true);
         try {
 
