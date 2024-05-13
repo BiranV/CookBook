@@ -89,10 +89,15 @@ select {
   }
 
   label {
+    margin-top: 1rem;
+  }
+
+  .account {
+    margin-top: 1rem;
+
     span {
       cursor: pointer;
       text-decoration: underline;
-
     }
   }
 }

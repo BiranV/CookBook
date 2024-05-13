@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { AuthModeProvider } from "./context/AuthModeContext";
 import Navbar from "./components/Navbar"
+import Spinner from "./components/Spinner";
 import { lazy, Suspense } from 'react';
 
 const Home = lazy(() => import("./pages/Home"));
@@ -20,7 +21,7 @@ const router = createBrowserRouter([
 export default function App() {
     return (
         <AuthModeProvider>
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<Spinner />}>
                 <RouterProvider router={router} />
             </Suspense>
         </AuthModeProvider>

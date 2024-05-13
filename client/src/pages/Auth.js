@@ -18,14 +18,14 @@ export default function Auth() {
     return (
         <div className="auth">
             <AuthForm mode={isLogin ? "login" : "signup"} onSuccess={navigateToHome} authMode={setIsLogin} />
-            <label>
+            <div className="account">
                 {isLogin
                     ? "Don't have an account? "
                     : "Already have an account? "}
                 <span onClick={toggleAuthMode}>
                     {isLogin ? "Sign Up" : "Login"}
                 </span>
-            </label>
+            </div>
         </div>
     );
 }
