@@ -285,11 +285,6 @@ select {
         color: $dark-gray;
       }
 
-      .icon {
-        cursor: pointer;
-        font-size: large;
-      }
-
       .add-btn {
         color: $blue;
         border-color: $blue;
@@ -360,10 +355,6 @@ select {
             border-color: $red;
             color: $white;
           }
-        }
-
-        .icon {
-          cursor: pointer
         }
       }
     }
