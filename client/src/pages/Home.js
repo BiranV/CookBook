@@ -276,6 +276,30 @@ const Home = () => {
         setForm({ ...form, images: updatedImages });
     };
 
+    const handleClear = () => {
+        setForm({
+            title: "",
+            ingredients: [],
+            steps: [],
+            images: [],
+        });
+        setImagesUpload([]);
+        setPreviousImagesUrls([]);
+    };
+
+    const handleClose = () => {
+        setForm({
+            title: "",
+            ingredients: [],
+            steps: [],
+            images: [],
+        });
+        setPopupState({ ...popupState, active: false })
+        setImagesUpload([]);
+        setPreviousImagesUrls([]);
+    };
+
+
     const handleSnackbar = (val) => {
         setSnackbar({ show: true, text: val });
         setTimeout(() => {
@@ -373,7 +397,8 @@ const Home = () => {
                             </div>
                             <div className="container-buttons">
                                 <button className="submit-btn" type="submit" disabled={loading}>Submit</button>
-                                <button className="close-btn" type="button" onClick={() => setPopupState({ ...popupState, active: false })}>Close</button>
+                                <button className="clear-btn" type="button" onClick={handleClear}>Clear</button>
+                                <button className="close-btn" type="button" onClick={handleClose}>Close</button>
                             </div>
                         </form>
                     </div>

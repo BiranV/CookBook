@@ -165,11 +165,11 @@ select {
       gap: 5px;
 
       .view-btn {
-        @include button-style($white, $blue, $blue);
+        @include button-style($white, $green, $green);
       }
 
       .edit-btn {
-        @include button-style($white, $green, $green);
+        @include button-style($white, $blue, $blue);
       }
 
       .delete-btn {
@@ -276,6 +276,10 @@ select {
 
         .submit-btn {
           @include button-style($white, $green, $green);
+        }
+
+        .clear-btn {
+          @include button-style($white, $blue, $blue);
         }
 
         .close-btn {
