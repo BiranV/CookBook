@@ -118,7 +118,7 @@ const Home = () => {
                     Authorization: `Bearer ${ token }`,
                 };
                 const response = await axios.post("/", { ...updatedForm, userEmail: localStorage.getItem("userEmail") }, { headers });
-                const updatedRecipe = { ...response.data.obj, viewing: true }; // Set viewing to true
+                const updatedRecipe = { ...response.data.obj, viewing: true };
                 const updatedRecipes = recipes.map((recipe) => ({
                     ...recipe,
                     viewing: false,

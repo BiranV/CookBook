@@ -9,7 +9,7 @@ const RecipeExport = ({ recipe }) => {
         const textWidth = doc.getStringUnitWidth(recipe.title) * 16 / doc.internal.scaleFactor;
         doc.text(recipe.title, 10, 10);
         doc.setLineWidth(0.5);
-        doc.line(10, 12, 10 + textWidth, 12); // Drawing a line below the title to simulate underline
+        doc.line(10, 12, 10 + textWidth, 12);
         doc.setFont("helvetica", "normal");
         doc.setFontSize(12);
         doc.setFont("helvetica", "bold");
