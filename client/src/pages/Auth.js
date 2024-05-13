@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthForm from "../components/AuthForm";
 
-export default function Auth() {
+const Auth = () => {
     const navigate = useNavigate();
 
     const [isLogin, setIsLogin] = useState(true);
@@ -29,3 +29,5 @@ export default function Auth() {
         </div>
     );
 }
+
+export default Auth;

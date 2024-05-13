@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useAuthMode } from '../context/AuthModeContext';
 import axios from "../api/axios";
 
-export default function AuthForm({ mode, onSuccess }) {
+const AuthForm = ({ mode, onSuccess }) => {
     const { setAuthMode } = useAuthMode();
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
@@ -71,3 +71,5 @@ export default function AuthForm({ mode, onSuccess }) {
         </div>
     );
 }
+
+export default AuthForm;

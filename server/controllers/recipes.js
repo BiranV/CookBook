@@ -28,7 +28,7 @@ const updateRecipe = async (req, res) => {
         if (!recipe) {
             return res.status(404).json({ message: 'Recipe not found' });
         }
-        // Check if the logged-in user is the creator of the recipe
+
         if (recipe.userEmail !== req.user.email) {
             return res.status(403).json({ message: 'You are not authorized to update this recipe' });
         }
@@ -45,7 +45,7 @@ const deleteRecipe = async (req, res) => {
         if (!recipe) {
             return res.status(404).json({ message: 'Recipe not found' });
         }
-        // Check if the logged-in user is the creator of the recipe
+
         if (recipe.userEmail !== req.user.email) {
             return res.status(403).json({ message: 'You are not authorized to delete this recipe' });
         }

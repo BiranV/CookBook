@@ -1,11 +1,13 @@
 import { Outlet } from 'react-router-dom'
 import Header from './Header'
 
-export default function Navbar() {
+const Navbar = () => {
   return (
     <>
       <Header />
       <Outlet />
     </>
   )
-} 
+}
+
+export default Navbar;

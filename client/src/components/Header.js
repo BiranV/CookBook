@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuthMode } from '../context/AuthModeContext';
 
-export default function Header() {
+const Header = () => {
   const { setAuthMode, authMode } = useAuthMode();
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,3 +32,5 @@ export default function Header() {
     </header>
   );
 }
+
+export default Header;
