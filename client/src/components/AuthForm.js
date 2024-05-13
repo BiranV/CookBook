@@ -61,7 +61,7 @@ const AuthForm = ({ mode, onSuccess }) => {
                 <input type="email" id="email" placeholder="Enter your email" ref={emailRef} required />
                 <label htmlFor="password">Password</label>
                 <input type="password" id="password" placeholder="Enter your password" ref={passwordRef} required />
-                <button className="btn-login" type="submit" disabled={loading}>
+                <button className="login-btn" type="submit" disabled={loading}>
                     {loading ? `${ mode === "login" ? "Logging in..." : "Signing up..." }` : `${ mode === "login" ? "Login" : "Signup" }`}
                 </button>
                 {error && (

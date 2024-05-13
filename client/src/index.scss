@@ -1,3 +1,4 @@
+// Variables
 $shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 $blue: #2F75D1;
 $red: #DB3052;
@@ -9,6 +10,7 @@ $white: #FFFFFF;
 $light-black: #252525;
 $black: #000000;
 
+// Global styles
 * {
   margin: 0;
   padding: 0;
@@ -16,14 +18,17 @@ $black: #000000;
   font-family: "Trebuchet MS", sans-serif;
 }
 
+// Global element styles
 body {
   background-color: $light-gray;
   text-align: center;
 }
 
-button {
+// Common button styles
+@mixin button-style($bg-color, $border-color, $text-color) {
   appearance: none;
   border: 1px solid;
+  width: 100px;
   cursor: pointer;
   font-weight: bold;
   padding: 0.4rem 0.6rem;
@@ -31,9 +36,13 @@ button {
   opacity: 0.7;
   transition: 0.3s;
   background-color: $white;
+  color: $text-color;
 
   &:hover {
     opacity: 1;
+    background-color: $text-color;
+    border-color: $text-color;
+    color: $bg-color;
   }
 }
 
@@ -50,6 +59,7 @@ select {
   background-color: $white;
 }
 
+// Authentication section
 .auth {
   h2 {
     margin-top: 1rem;
@@ -71,20 +81,14 @@ select {
       margin-bottom: 0.2rem;
     }
 
-    .btn-login {
+    .login-btn {
+      @include button-style($white, $dark-gray, $dark-gray);
       margin: 0.5rem 0 0 0;
-      color: $dark-gray;
-
-      &:hover {
-        background-color: $dark-gray;
-        border-color: $dark-gray;
-        color: $white;
-      }
     }
 
     p {
       color: $red;
-      margin: 0.5rem 0
+      margin: 0.5rem 0;
     }
   }
 
@@ -102,6 +106,7 @@ select {
   }
 }
 
+// Header section
 .header {
   width: 100%;
   height: 5rem;
@@ -117,24 +122,17 @@ select {
     font-size: 2rem;
     color: $white;
     text-shadow: 1px 1px 2px $black;
-    ;
     font-weight: bold;
     text-decoration: none;
   }
 
-  button {
-    color: $dark-gray;
-    border-color: $dark-gray;
-    width: 100px;
-
-    &:hover {
-      background-color: $dark-gray;
-      border-color: $dark-gray;
-      color: $white;
-    }
+  .login-btn,
+  .logout-btn {
+    @include button-style($white, $dark-gray, $dark-gray);
   }
 }
 
+// Home section
 .home {
   max-width: 800px;
   margin: auto;
@@ -146,15 +144,7 @@ select {
   }
 
   .add-btn {
-    color: $dark-gray;
-    border-color: $dark-gray;
-    width: 100px;
-
-    &:hover {
-      background-color: $dark-gray;
-      border-color: $dark-gray;
-      color: $white;
-    }
+    @include button-style($white, $dark-gray, $dark-gray);
   }
 
   .card {
@@ -167,7 +157,6 @@ select {
 
     h5 {
       margin: 0.25rem 0;
-      font-weight: 100;
     }
 
     .container-buttons {
@@ -176,56 +165,21 @@ select {
       gap: 5px;
 
       .view-btn {
-        color: $blue;
-        border-color: $blue;
-        width: 100px;
-
-        &:hover {
-          background-color: $blue;
-          border-color: $blue;
-          color: $white;
-        }
+        @include button-style($white, $blue, $blue);
       }
 
       .edit-btn {
-        color: $green;
-        border-color: $green;
-        width: 100px;
-
-        &:hover {
-          background-color: $green;
-          border-color: $green;
-          color: $white;
-        }
+        @include button-style($white, $green, $green);
       }
 
       .delete-btn {
-        color: $red;
-        border-color: $red;
-        width: 100px;
-
-        &:hover {
-          background-color: $red;
-          border-color: $red;
-          color: $white;
-        }
-
+        @include button-style($white, $red, $red);
       }
 
       .pdf-btn {
-        color: $light-black;
-        border-color: $light-black;
-        width: 100px;
-
-        &:hover {
-          background-color: $light-black;
-          border-color: $light-black;
-          color: $white;
-        }
+        @include button-style($white, $light-black, $light-black);
       }
     }
-
-
 
     .container-images {
       margin: 0.5rem 0;
@@ -236,7 +190,7 @@ select {
         max-height: 80px;
         object-fit: cover;
         border: 1px solid $dark-gray;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.30);
+        box-shadow: $shadow;
         cursor: zoom-in;
       }
     }
@@ -251,7 +205,6 @@ select {
   ol,
   ul {
     list-style-position: inside;
-    display: block;
   }
 
   li {
@@ -285,18 +238,6 @@ select {
         color: $dark-gray;
       }
 
-      .add-btn {
-        color: $blue;
-        border-color: $blue;
-        width: 120px;
-
-        &:hover {
-          background-color: $blue;
-          border-color: $blue;
-          color: $white;
-        }
-      }
-
       .container-image {
         display: flex;
         flex-wrap: wrap;
@@ -306,7 +247,7 @@ select {
           max-height: 80px;
           object-fit: cover;
           border: 1px solid $dark-gray;
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.30);
+          box-shadow: $shadow;
           cursor: zoom-in;
           margin-bottom: 0.5rem;
         }
@@ -334,27 +275,11 @@ select {
         gap: 5px;
 
         .submit-btn {
-          color: $green;
-          border-color: $green;
-          width: 100px;
-
-          &:hover {
-            background-color: $green;
-            border-color: $green;
-            color: $white;
-          }
+          @include button-style($white, $green, $green);
         }
 
         .close-btn {
-          color: $red;
-          border-color: $red;
-          width: 100px;
-
-          &:hover {
-            background-color: $red;
-            border-color: $red;
-            color: $white;
-          }
+          @include button-style($white, $red, $red);
         }
       }
     }
@@ -374,18 +299,9 @@ select {
       }
 
       .close-btn {
-        color: $red;
-        border-color: $red;
-        width: 100px;
+        @include button-style($white, $red, $red);
         margin-top: 1rem;
-
-        &:hover {
-          background-color: $red;
-          border-color: $red;
-          color: $white;
-        }
       }
-
     }
   }
 
@@ -397,7 +313,6 @@ select {
     resize: vertical;
     max-height: 150px;
     margin-bottom: 0.3rem;
-
   }
 
   input[type="file"].inputfile {
@@ -408,7 +323,7 @@ select {
   }
 }
 
-
+// Other styles
 .snackbar {
   min-width: 250px;
   margin-left: -125px;

@@ -352,7 +352,7 @@ const Home = () => {
                                     <DeleteOutlineIcon className="icon" onClick={() => handleRemoveIngredient(index)} />
                                 </div>
                             ))}
-                            <button className="add-btn" type="button" onClick={() => setForm({ ...form, ingredients: [...form.ingredients, ""] })}>Add ingredient</button>
+                            <button className="add-btn" style={{ width: '120px' }} type="button" onClick={() => setForm({ ...form, ingredients: [...form.ingredients, ""] })}>Add ingredient</button>
                             <label>Steps</label>
                             {form.steps?.map((step, index) => (
                                 <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
@@ -360,7 +360,7 @@ const Home = () => {
                                     <DeleteOutlineIcon className="icon" onClick={() => handleRemoveStep(index)} />
                                 </div>
                             ))}
-                            <button className="add-btn" type="button" onClick={() => setForm({ ...form, steps: [...form.steps, ""] })
+                            <button className="add-btn" style={{ width: '120px' }} type="button" onClick={() => setForm({ ...form, steps: [...form.steps, ""] })
                             }>Add step</button>
                             <input className="inputfile" type="file" onChange={(e) => setImagesUpload(Array.from(e.target.files))} multiple />
                             <div className="container-image">

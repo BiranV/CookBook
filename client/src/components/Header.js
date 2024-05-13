@@ -24,10 +24,10 @@ const Header = () => {
     <header className="header">
       <Link to="/" className="logo">CookBook</Link>
       {!isAuthRoute && authMode && isLoggedIn && (
-        <button onClick={handleLogout} className="logout">Log Out</button>
+        <button onClick={handleLogout} className="logout-btn">Log Out</button>
       )}
       {!isAuthRoute && !authMode && (
-        <button onClick={handleLogin} className="login">Login</button>
+        <button onClick={handleLogin} className="login-btn">Login</button>
       )}
     </header>
   );
