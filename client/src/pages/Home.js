@@ -54,7 +54,7 @@ const Home = () => {
             } catch (error) {
                 console.error(error.message);
             } finally {
-                // setLoading(false);
+                setLoading(false);
             }
         };
 
