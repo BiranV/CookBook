@@ -143,6 +143,18 @@ select {
     margin: 1rem auto;
   }
 
+  .sort-options {
+    width: 40%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    select {
+      width: 45%;
+    }
+  }
+
   .add-btn {
     @include button-style($white, $dark-gray, $dark-gray);
   }

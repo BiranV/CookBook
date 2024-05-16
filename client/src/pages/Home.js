@@ -11,6 +11,7 @@ import Filter from "../components/Filter";
 import Spinner from "../components/Spinner";
 import Snackbar from "../components/Snackbar";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import SwapVertIcon from '@mui/icons-material/SwapVert';
 import RecipeExport from '../components/RecipeExport';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -41,6 +42,7 @@ const Home = () => {
         show: false,
         text: "",
     });
+    const [sortOrder, setSortOrder] = useState("", "a-z", "z-a", "new-old", "old-new");
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -150,6 +152,7 @@ const Home = () => {
             setPopupState({ active: true, editMode: true });
         }
     };
+
     const submitEdit = async (e) => {
         e.preventDefault();
 
@@ -299,7 +302,6 @@ const Home = () => {
         setPreviousImagesUrls([]);
     };
 
-
     const handleSnackbar = (val) => {
         setSnackbar({ show: true, text: val });
         setTimeout(() => {
@@ -313,6 +315,27 @@ const Home = () => {
     };
 
     const recipesFiltered = recipes.filter((recipe) => recipe.title.toLowerCase().includes(filter) || filter === "");
+
+    const handleSort = (e) => {
+        if (sortOrder !== e) {
+            setSortOrder(e);
+        }
+    };
+
+    const sortedRecipes = [...recipesFiltered].sort((a, b) => {
+        switch (sortOrder) {
+            case "a-z":
+                return a.title.localeCompare(b.title);
+            case "z-a":
+                return b.title.localeCompare(a.title);
+            case "new-old":
+                return (new Date(b.updatedAt) - new Date(a.updatedAt));
+            case "old-new":
+                return (new Date(a.updatedAt) - new Date(b.updatedAt));
+            default:
+                return 0;
+        }
+    });
 
     if (loading) {
         return <Spinner />;
@@ -333,7 +356,20 @@ const Home = () => {
                 value={filter}
                 onChange={(e) => setSearchParams((prev) => { prev.set("filter", e.target.value.toLowerCase()); return prev; }, { replace: true })}
             />
-            {recipesFiltered.map((recipe) => (
+            <div className="sort-options">
+                <select value={sortOrder} onChange={(e) => handleSort(e.target.value)}>
+                    <option value="" >Title</option>
+                    <option value="a-z">A-Z</option>
+                    <option value="z-a">Z-A</option>
+                </select>
+                <SwapVertIcon className="icon" />
+                <select value={sortOrder} onChange={(e) => handleSort(e.target.value)}>
+                    <option value="" >Date</option>
+                    <option value="new-old">Newer to Older</option>
+                    <option value="old-new">Older to Newer</option>
+                </select>
+            </div>
+            {sortedRecipes.map((recipe) => (
                 <div className="card" key={recipe._id}>
                     <h2>{recipe.title}</h2>
                     <h5>Updated date: {new Date(recipe.updatedAt).getDate()}/{new Date(recipe.updatedAt).getMonth() + 1}/{new Date(recipe.updatedAt).getFullYear()}</h5>
