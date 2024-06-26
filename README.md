@@ -1,4 +1,4 @@
-[Chicken and Green Beans (1).pdf](https://github.com/BiranV/CookBook/files/15329010/Chicken.and.Green.Beans.1.pdf)## Live project using Vercel: https://cook-book-client-zeta.vercel.app
+## Live project using Vercel: https://cook-book-client-zeta.vercel.app
 
 ## Available Scripts
 
