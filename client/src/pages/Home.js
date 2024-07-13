@@ -61,7 +61,7 @@ const Home = () => {
         };
 
         fetchData();
-    }, [navigate, authMode]);
+    }, [navigate, authMode, setAuthMode]);
 
     const handleView = (id) => {
         setRecipes((prevRecipes) =>
