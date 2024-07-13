@@ -8,10 +8,10 @@ import { storage } from "../firebase";
 import axios from "../api/axios";
 import ImageModal from "../components/ImageModal";
 import Filter from "../components/Filter";
+import SortOptions from "../components/SortOptions";
 import Spinner from "../components/Spinner";
 import Snackbar from "../components/Snackbar";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import SwapVertIcon from '@mui/icons-material/SwapVert';
 import RecipeExport from '../components/RecipeExport';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -356,19 +356,7 @@ const Home = () => {
                 value={filter}
                 onChange={(e) => setSearchParams((prev) => { prev.set("filter", e.target.value.toLowerCase()); return prev; }, { replace: true })}
             />
-            <div className="sort-options">
-                <select value={sortOrder} onChange={(e) => handleSort(e.target.value)}>
-                    <option value="" >Title</option>
-                    <option value="a-z">A-Z</option>
-                    <option value="z-a">Z-A</option>
-                </select>
-                <SwapVertIcon className="icon" />
-                <select value={sortOrder} onChange={(e) => handleSort(e.target.value)}>
-                    <option value="" >Date</option>
-                    <option value="new-old">Newer to Older</option>
-                    <option value="old-new">Older to Newer</option>
-                </select>
-            </div>
+            <SortOptions sortOrder={sortOrder} handleSort={handleSort} />
             {sortedRecipes.map((recipe) => (
                 <div className="card" key={recipe._id}>
                     <h2>{recipe.title}</h2>
