@@ -19,15 +19,13 @@ const MessageForm = ({ recipient  }) => {
                 }
             });
             setSentMessage(response.data.message);
+            setName('');
+            setMessage('');
         } catch (error) {
             setError('Failed to send message');
             console.error('Error sending message:', error);
         } finally {
             setSending(false);
-            setName('');
-            setMessage('');
-            setSentMessage(null);
-            setError(null);
         }
     };
 
