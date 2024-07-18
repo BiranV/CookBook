@@ -22,7 +22,7 @@ const getMessages = async (req, res) => {
     const userEmail = req.user.email; 
 
     try {
-        const messages = await Message.find({ $or: [{ sender: userEmail }, { recipient: userEmail }] });
+        const messages = await Message.find({ recipient: userEmail });
 
         return res.status(200).json(messages);
     } catch (error) {
