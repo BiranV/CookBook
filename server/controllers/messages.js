@@ -3,8 +3,7 @@ const Message = require('../models/message');
 const User = require('../models/auth');
 
 const sendMessage = async (req, res) => {
-    const { recipient, name, message } = req.body;
-    const senderEmail = req.user.email;
+    const { recipient, sender, name, message } = req.body;
 
     try {
         // Check if recipient exists
@@ -14,7 +13,7 @@ const sendMessage = async (req, res) => {
         }
 
         // Save message in database
-        const newMessage = await Message.create({ sender: senderEmail,name, recipient, message });
+        const newMessage = await Message.create({ sender, name, recipient, message });
 
         return res.status(201).json({ message: 'Message sent successfully', obj: newMessage });
     } catch (error) {

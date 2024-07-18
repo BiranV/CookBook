@@ -370,7 +370,7 @@ const Home = () => {
                             <label>Steps</label>
                             <ol>{recipe.steps.map((step, index) => (<li key={index}>{step}</li>))}</ol>
                             {authMode &&
-                                <MessageForm recipient={recipe.userEmail} />
+                                <MessageForm recipient={recipe.userEmail} sender={getUserEmailFromToken()} />
                             }
                         </div>
 
