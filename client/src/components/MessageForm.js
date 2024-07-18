@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from '../api/axios';
 
-const MessageForm = ({ recipent }) => {
+const MessageForm = ({ recipient  }) => {
     const [name, setName] = useState('');
     const [message, setMessage] = useState('');
     const [sending, setSending] = useState(false);
@@ -13,7 +13,7 @@ const MessageForm = ({ recipent }) => {
         setSending(true);
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.post('/messages', { recipent, name, message }, {
+            const response = await axios.post('/messages', { recipient , name, message }, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
