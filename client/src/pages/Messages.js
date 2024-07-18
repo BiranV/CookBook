@@ -9,7 +9,7 @@ const Messages = () => {
     useEffect(() => {
         const fetchMessages = async () => {
             try {
-                const response = await axios.get('/messages'); // Adjust endpoint URL as needed
+                const response = await axios.get('/messages');
                 setMessages(response.data);
             } catch (error) {
                 console.error('Error fetching messages:', error);
@@ -34,7 +34,7 @@ const Messages = () => {
                 <ul>
                     {messages.map((message, index) => (
                         <li key={index}>
-                            <strong>From:</strong> {message.from}<br />
+                            <strong>From:</strong> {message.sender}<br />
                             <strong>Message:</strong> {message.message}<br />
                             <strong>Sent:</strong> {new Date(message.createdAt).toLocaleString()}
                         </li>

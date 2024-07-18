@@ -19,10 +19,9 @@ module.exports = {
 
 
 const getMessages = async (req, res) => {
-    const userEmail = req.user.email;
+    const userEmail = req.user.email; 
 
     try {
-        // Retrieve messages where the authenticated user is either sender or recipient
         const messages = await Message.find({ $or: [{ sender: userEmail }, { recipient: userEmail }] });
 
         return res.status(200).json(messages);

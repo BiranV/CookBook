@@ -18,7 +18,6 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
     })
     .catch((error) => {
         console.error("Error connecting to MongoDB:", error);
-        process.exit(1); // Terminate the process if unable to connect to MongoDB
     });
 
 // Routes
