@@ -3,16 +3,9 @@ const Message = require('../models/message');
 const User = require('../models/auth');
 
 const sendMessage = async (req, res) => {
-    const { recipient, sender, name, message } = req.body;
+    const { sender, name, recipient, message } = req.body;
 
     try {
-        // Check if recipient exists
-        const recipientUser = await User.findOne({ email: recipient });
-        if (!recipientUser) {
-            return res.status(404).json({ message: 'Recipient not found' });
-        }
-
-        // Save message in database
         const newMessage = await Message.create({ sender, name, recipient, message });
 
         return res.status(201).json({ message: 'Message sent successfully', obj: newMessage });
