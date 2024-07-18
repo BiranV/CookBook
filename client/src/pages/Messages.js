@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import axios from '../api/axios';
 import Spinner from '../components/Spinner';
 import { getUserEmailFromToken } from '../utils/authUtils';
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
 
 const Messages = () => {
     const [messages, setMessages] = useState([]);
@@ -26,7 +27,7 @@ const Messages = () => {
                         'X-User-Email': userEmail
                     }
                 });
-                setMessages(response.data);
+                toast("You are not authorized to delete this recipe.");
             } catch (error) {
                 console.error('Error fetching messages:', error);
             } finally {
@@ -43,20 +44,26 @@ const Messages = () => {
 
     return (
         <div className="messages">
-        {messages.length === 0 ? (
-            <p>No messages found.</p>
-        ) : (
-            <>
-                {messages.map((message, index) => (
-                    <div className="card" key={index}>
-                        <h5>From: {message.sender}</h5>
-                        <p><strong>Message:</strong> {message.message}</p>
-                        <p><strong>Sent:</strong> {new Date(message.createdAt).toLocaleString()}</p>
-                    </div>
-                ))}
-            </>
-        )}
-    </div>
+            <ToastContainer
+                position="top-center"
+                autoClose={2000}
+                closeOnClick
+                rtl={false}
+            />
+            {messages.length === 0 ? (
+                <p>No messages found.</p>
+            ) : (
+                <>
+                    {messages.map((message, index) => (
+                        <div className="card" key={index}>
+                            <h5>From: {message.sender}</h5>
+                            <p><strong>Message:</strong> {message.message}</p>
+                            <p><strong>Sent:</strong> {new Date(message.createdAt).toLocaleString()}</p>
+                        </div>
+                    ))}
+                </>
+            )}
+        </div>
     );
 };
 

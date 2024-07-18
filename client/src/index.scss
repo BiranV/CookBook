@@ -364,22 +364,28 @@ select {
   margin-top: 2rem;
 }
 
-.message-form,
 .messages {
+  max-width: 800px;
+  margin: auto;
+  margin-top: 2rem;
+}
+
+.message-form {
   margin-top: 2rem;
 
   .message-btn {
     @include button-style($white, $dark-gray, $dark-gray);
   }
+}
 
-  .card {
-    background-color: $white;
-    padding: 1rem;
-    margin: 1rem 0;
-    text-align: left;
-    border: none;
-    box-shadow: $shadow;
-  }
+.card {
+  background-color: $white;
+  padding: 1rem;
+  margin: 1rem 0;
+  text-align: left;
+  border: none;
+  box-shadow: $shadow;
+}
 }
 
 @keyframes spinner {

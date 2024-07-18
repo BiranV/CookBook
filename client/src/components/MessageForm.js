@@ -17,8 +17,7 @@ const MessageForm = ({ recipient, sender }) => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            setSentMessage(response.data.message);
-            setMessage('');
+            toast("Message sent successfully");
         } catch (error) {
             setError('Failed to send message');
             console.error('Error sending message:', error);
@@ -35,8 +34,7 @@ const MessageForm = ({ recipient, sender }) => {
                 {sending && <p>Sending message...</p>}
                 {error && <p className="error">{error}</p>}
                 {sentMessage && <p className="success">Message sent successfully</p>}
-
-                <button className='message-btn' type="submit" disabled={sending}>Send Message</button>
+                <button className='message-btn' type="submit" disabled={sending}>Send</button>
             </form>
         </div>
     );
