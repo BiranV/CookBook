@@ -3,7 +3,7 @@ const Message = require('../models/message');
 const User = require('../models/auth');
 
 const sendMessage = async (req, res) => {
-    const { recipent, name, message } = req.body;
+    const { recipient, name, message } = req.body;
     const senderEmail = req.user.email;
 
     try {
