@@ -36,7 +36,7 @@ const MessageForm = ({ recipient, sender }) => {
                 {error && <p className="error">{error}</p>}
                 {sentMessage && <p className="success">Message sent successfully</p>}
 
-                <button type="submit" disabled={sending}>Send Message</button>
+                <button className='message-btn' type="submit" disabled={sending}>Send Message</button>
             </form>
         </div>
     );

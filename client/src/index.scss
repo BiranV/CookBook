@@ -360,10 +360,26 @@ select {
   bottom: 30px;
 }
 
-.not-found,
+.not-found {
+  margin-top: 2rem;
+}
+
 .message-form,
 .messages {
   margin-top: 2rem;
+
+  .message-btn {
+    @include button-style($white, $dark-gray, $dark-gray);
+  }
+
+  .card {
+    background-color: $white;
+    padding: 1rem;
+    margin: 1rem 0;
+    text-align: left;
+    border: none;
+    box-shadow: $shadow;
+  }
 }
 
 @keyframes spinner {
