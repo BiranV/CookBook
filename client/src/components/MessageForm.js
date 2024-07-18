@@ -29,9 +29,8 @@ const MessageForm = ({ recipient, sender }) => {
 
     return (
         <div className="message-form">
-            <h2>Send a Message</h2>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="message">Message:</label>
+                <label htmlFor="message">Leave a message:</label>
                 <textarea id="message" value={message} onChange={(e) => setMessage(e.target.value)} rows="4" required></textarea>
                 {sending && <p>Sending message...</p>}
                 {error && <p className="error">{error}</p>}

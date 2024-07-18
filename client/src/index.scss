@@ -126,16 +126,16 @@ select {
     text-decoration: none;
   }
 
-  .header-btns{
+  .header-btns {
     display: flex;
     gap: 10px;
-    
+
     .login-btn,
     .logout-btn {
       @include button-style($white, $dark-gray, $dark-gray);
     }
   }
-  
+
 }
 
 // Home section
@@ -360,7 +360,9 @@ select {
   bottom: 30px;
 }
 
-.not-found {
+.not-found,
+.message-form,
+.messages {
   margin-top: 2rem;
 }
 

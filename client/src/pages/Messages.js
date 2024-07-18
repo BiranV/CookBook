@@ -43,11 +43,10 @@ const Messages = () => {
 
     return (
         <div className="messages">
-        <h2>Messages</h2>
         {messages.length === 0 ? (
             <p>No messages found.</p>
         ) : (
-            <div className="message-cards">
+            <>
                 {messages.map((message, index) => (
                     <div className="card" key={index}>
                         <h5>From: {message.sender}</h5>
@@ -55,7 +54,7 @@ const Messages = () => {
                         <p><strong>Sent:</strong> {new Date(message.createdAt).toLocaleString()}</p>
                     </div>
                 ))}
-            </div>
+            </>
         )}
     </div>
     );
