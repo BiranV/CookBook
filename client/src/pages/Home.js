@@ -100,7 +100,7 @@ const Home = () => {
         setLoading(true);
         try {
 
-            const imageRefs = Array.from({ length: imagesUpload.length }, () => ref(storage, `images/${ uuidv4() }`));
+            const imageRefs = Array.from({ length: imagesUpload.length }, () => ref(storage, `images/${uuidv4()}`));
 
             await Promise.all(imagesUpload.map(async (file, index) => {
                 await uploadBytes(imageRefs[index], file);
@@ -119,7 +119,7 @@ const Home = () => {
                     return;
                 }
                 const headers = {
-                    Authorization: `Bearer ${ token }`,
+                    Authorization: `Bearer ${token}`,
                 };
                 const response = await axios.post("/", { ...updatedForm, userEmail: localStorage.getItem("userEmail") }, { headers });
                 const updatedRecipe = { ...response.data.obj, viewing: true };
@@ -174,11 +174,11 @@ const Home = () => {
 
         try {
             const token = localStorage.getItem("token");
-            const headers = { Authorization: `Bearer ${ token }` };
+            const headers = { Authorization: `Bearer ${token}` };
 
             if (imagesUpload.length > 0) {
                 // Upload new images and get their download URLs
-                const newImageRefs = Array.from({ length: imagesUpload.length }, () => ref(storage, `images/${ uuidv4() }`));
+                const newImageRefs = Array.from({ length: imagesUpload.length }, () => ref(storage, `images/${uuidv4()}`));
 
                 await Promise.all(imagesUpload.map(async (file, index) => {
                     await uploadBytes(newImageRefs[index], file);
@@ -217,13 +217,13 @@ const Home = () => {
     };
 
     const submitDelete = async (recipe) => {
-        const result = window.confirm(`Are you sure want to delete ${ recipe.title } recipe?`);
+        const result = window.confirm(`Are you sure want to delete ${recipe.title} recipe?`);
         if (!result) return;
 
         try {
             const token = localStorage.getItem("token");
             const headers = {
-                Authorization: `Bearer ${ token }`,
+                Authorization: `Bearer ${token}`,
             };
 
             // Check if the logged-in user is the creator of the recipe
@@ -345,8 +345,6 @@ const Home = () => {
 
     return (
         <div className="home">
-                        <MessageForm />
-
             <ToastContainer
                 position="top-center"
                 autoClose={2000}
@@ -371,7 +369,11 @@ const Home = () => {
                             <ul>{recipe.ingredients.map((ingredient, index) => (<li key={index}>{ingredient}</li>))}</ul>
                             <label>Steps</label>
                             <ol>{recipe.steps.map((step, index) => (<li key={index}>{step}</li>))}</ol>
+                            {authMode &&
+                                <MessageForm recipient={recipe.userEmail} />
+                            }
                         </div>
+
                     )}
                     <div className="container-images">
                         {recipe.images.map((image, index) => (

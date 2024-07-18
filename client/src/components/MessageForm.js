@@ -1,8 +1,7 @@
-// components/MessageForm.js
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from '../api/axios';
 
-const MessageForm = () => {
+const MessageForm = ({ recipent }) => {
     const [name, setName] = useState('');
     const [message, setMessage] = useState('');
     const [sending, setSending] = useState(false);
@@ -14,7 +13,7 @@ const MessageForm = () => {
         setSending(true);
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.post('/messages', { name, message }, {
+            const response = await axios.post('/messages', { recipent, name, message }, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -25,6 +24,10 @@ const MessageForm = () => {
             console.error('Error sending message:', error);
         } finally {
             setSending(false);
+            setName('');
+            setMessage('');
+            setSentMessage(null);
+            setError(null);
         }
     };
 
