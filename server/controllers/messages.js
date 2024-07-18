@@ -1,12 +1,10 @@
-// controllers/messages.js
 const Message = require('../models/message');
-const User = require('../models/auth');
 
 const sendMessage = async (req, res) => {
-    const { sender, name, recipient, message } = req.body;
+    const { sender, recipient, message } = req.body;
 
     try {
-        const newMessage = await Message.create({ sender, name, recipient, message });
+        const newMessage = await Message.create({ sender, recipient, message });
 
         return res.status(201).json({ message: 'Message sent successfully', obj: newMessage });
     } catch (error) {
@@ -14,6 +12,11 @@ const sendMessage = async (req, res) => {
         return res.status(500).json({ message: 'Failed to send message' });
     }
 };
+
+module.exports = {
+    sendMessage
+};
+
 
 const getMessages = async (req, res) => {
     const userEmail = req.user.email;
