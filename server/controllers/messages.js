@@ -1,10 +1,10 @@
 const Message = require('../models/message');
 
 const sendMessage = async (req, res) => {
-    const { sender, recipient, message } = req.body;
+    const { recipient, message } = req.body;
 
     try {
-        const newMessage = await Message.create({ sender, recipient, message });
+        const newMessage = await Message.create({ sender: req.user.email, recipient, message });
 
         return res.status(201).json({ message: 'Message sent successfully', obj: newMessage });
     } catch (error) {
@@ -13,15 +13,9 @@ const sendMessage = async (req, res) => {
     }
 };
 
-module.exports = {
-    sendMessage
-};
-
 const getMessages = async (req, res) => {
-    const userEmail = req.headers['x-user-email'];
-
     try {
-        const messages = await Message.find({ recipient: userEmail });
+        const messages = await Message.find({ recipient: req.user.email });
 
         return res.status(200).json(messages);
     } catch (error) {
