@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuthMode } from '../context/AuthModeContext';
-import InboxButton from './InboxButton';
-import Inbox from './Inbox';
 
 const Header = () => {
   const { setAuthMode, authMode } = useAuthMode();
@@ -22,16 +20,24 @@ const Header = () => {
     navigate("/")
   };
 
+  const handleInbox = () => {
+    navigate("/messages");
+  }
+
   return (
     <header className="header">
       <Link to="/" className="logo">CookBook</Link>
-      <InboxButton />
+      <div className="header-btns">
       {!isAuthRoute && authMode && isLoggedIn && (
+        <>
+      <button onClick={handleInbox} className="login-btn">Inbox</button>
         <button onClick={handleLogout} className="logout-btn">Log Out</button>
+        </>
       )}
       {!isAuthRoute && !authMode && (
         <button onClick={handleLogin} className="login-btn">Login</button>
       )}
+      </div>
     </header>
   );
 }

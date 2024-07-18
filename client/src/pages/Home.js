@@ -18,6 +18,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Home = () => {
     const navigate = useNavigate();
+
+    const [messages, setMessages] = useState([]);
     const [searchParams, setSearchParams] = useSearchParams({ filter: "" });
     const filter = searchParams.get("filter");
     const { authMode, setAuthMode } = useAuthMode();
@@ -60,7 +62,22 @@ const Home = () => {
             }
         };
 
+        const fetchMessages = async () => {
+            try {
+                const response = await axios.get("/messages", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setMessages(response.data);
+            } catch (error) {
+                console.error('Error fetching messages:', error);
+            }
+        };
+
+
         fetchData();
+        fetchMessages();
     }, [navigate, authMode, setAuthMode]);
 
     const handleView = (id) => {

@@ -126,10 +126,16 @@ select {
     text-decoration: none;
   }
 
-  .login-btn,
-  .logout-btn {
-    @include button-style($white, $dark-gray, $dark-gray);
+  .header-btns{
+    display: flex;
+    gap: 10px;
+    
+    .login-btn,
+    .logout-btn {
+      @include button-style($white, $dark-gray, $dark-gray);
+    }
   }
+  
 }
 
 // Home section

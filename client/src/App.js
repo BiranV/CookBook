@@ -7,6 +7,7 @@ import { lazy, Suspense } from 'react';
 const Home = lazy(() => import("./pages/Home"));
 const Auth = lazy(() => import("./pages/Auth"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const Messages = lazy(() => import("./pages/Messages"));
 
 
 const router = createBrowserRouter([
@@ -14,6 +15,7 @@ const router = createBrowserRouter([
         path: "/", element: <Navbar />, children: [
             { path: "/", element: <Home /> },
             { path: "/auth", element: <Auth /> },
+            { path: "/messages", element: <Messages /> }, 
             { path: "/*", element: <NotFound /> },
         ]
     }
