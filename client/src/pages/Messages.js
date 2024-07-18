@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from '../api/axios';
 import Spinner from '../components/Spinner';
 import { getUserEmailFromToken } from '../utils/authUtils';
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 
 const Messages = () => {
     const [messages, setMessages] = useState([]);
@@ -43,20 +43,20 @@ const Messages = () => {
 
     return (
         <div className="messages">
-        {messages.length === 0 ? (
-            <p>No messages found.</p>
-        ) : (
-            <>
-                {messages.map((message, index) => (
-                    <div className="card" key={index}>
-                        <h5>From: {message.sender}</h5>
-                        <p><strong>Message:</strong> {message.message}</p>
-                        <p><strong>Sent:</strong> {new Date(message.createdAt).toLocaleString()}</p>
-                    </div>
-                ))}
-            </>
-        )}
-    </div>
+            {messages.length === 0 ? (
+                <p>No messages found.</p>
+            ) : (
+                <>
+                    {messages.map((message, index) => (
+                        <div className="card" key={index}>
+                            <p><strong>From:</strong>  {message.sender}</p>
+                            <p><strong>Message:</strong> {message.message}</p>
+                            <p><strong>Sent:</strong> {new Date(message.createdAt).toLocaleString()}</p>
+                        </div>
+                    ))}
+                </>
+            )}
+        </div>
     );
 };
 
