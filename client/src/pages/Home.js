@@ -15,11 +15,11 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import RecipeExport from '../components/RecipeExport';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import MessageForm from '../components/MessageForm';
 
 const Home = () => {
     const navigate = useNavigate();
 
-    const [messages, setMessages] = useState([]);
     const [searchParams, setSearchParams] = useSearchParams({ filter: "" });
     const filter = searchParams.get("filter");
     const { authMode, setAuthMode } = useAuthMode();
@@ -62,22 +62,7 @@ const Home = () => {
             }
         };
 
-        const fetchMessages = async () => {
-            try {
-                const response = await axios.get("/messages", {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                setMessages(response.data);
-            } catch (error) {
-                console.error('Error fetching messages:', error);
-            }
-        };
-
-
         fetchData();
-        fetchMessages();
     }, [navigate, authMode, setAuthMode]);
 
     const handleView = (id) => {
@@ -360,6 +345,8 @@ const Home = () => {
 
     return (
         <div className="home">
+                        <MessageForm />
+
             <ToastContainer
                 position="top-center"
                 autoClose={2000}

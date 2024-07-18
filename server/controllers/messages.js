@@ -1,20 +1,20 @@
 // controllers/messages.js
 const Message = require('../models/message');
-const User = require('../models/auth');
+// const User = require('../models/auth');
 
 const sendMessage = async (req, res) => {
-    const { recipient, message } = req.body;
+    const { message } = req.body;
     const senderEmail = req.user.email;
 
     try {
         // Check if recipient exists
-        const recipientUser = await User.findOne({ email: recipient });
-        if (!recipientUser) {
-            return res.status(404).json({ message: 'Recipient not found' });
-        }
+        // const recipientUser = await User.findOne({ email: recipient });
+        // if (!recipientUser) {
+        //     return res.status(404).json({ message: 'Recipient not found' });
+        // }
 
         // Save message in database
-        const newMessage = await Message.create({ sender: senderEmail, recipient, message });
+        const newMessage = await Message.create({ sender: senderEmail, message });
 
         return res.status(201).json({ message: 'Message sent successfully', obj: newMessage });
     } catch (error) {
