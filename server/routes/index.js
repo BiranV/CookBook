@@ -11,6 +11,8 @@ router.post('/signup', authControllers.signup);
 // Recipe routes (protected with verifyToken middleware for adding, editing, and deleting)
 router.get('/', recipesControllers.getAllRecipes);
 router.post('/', verifyToken, recipesControllers.createRecipe);
+router.get('/messages', verifyToken, recipesControllers.sendMessage);
+router.get('/messages', verifyToken, recipesControllers.getMessages);
 router.put('/:id', verifyToken, recipesControllers.updateRecipe);
 router.delete('/:id', verifyToken, recipesControllers.deleteRecipe);
 
