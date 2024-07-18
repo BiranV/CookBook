@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from '../api/axios';
 import Spinner from '../components/Spinner';
+import { getUserEmailFromToken } from '../utils/authUtils'; 
 
 const Messages = () => {
     const [messages, setMessages] = useState([]);
@@ -8,8 +9,20 @@ const Messages = () => {
 
     useEffect(() => {
         const fetchMessages = async () => {
+            const userEmail = getUserEmailFromToken(); // Retrieve user email from JWT token
+            if (!userEmail) {
+                console.error('User email not found in token');
+                setLoading(false);
+                return;
+            }
+
             try {
-                const response = await axios.get('/messages');
+                const response = await axios.get('/messages', {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        'X-User-Email': userEmail
+                    }
+                });
                 setMessages(response.data);
             } catch (error) {
                 console.error('Error fetching messages:', error);

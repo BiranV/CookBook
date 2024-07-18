@@ -17,9 +17,8 @@ module.exports = {
     sendMessage
 };
 
-
 const getMessages = async (req, res) => {
-    const userEmail = req.user.email; 
+    const userEmail = req.headers['x-user-email'];
 
     try {
         const messages = await Message.find({ recipient: userEmail });
