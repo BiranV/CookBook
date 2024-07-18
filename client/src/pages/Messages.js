@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import axios from '../api/axios';
 import Spinner from '../components/Spinner';
-import { getUserEmailFromToken } from '../utils/authUtils'; 
+import { getUserEmailFromToken } from '../utils/authUtils';
+import { useNavigate } from "react-router-dom"; 
 
 const Messages = () => {
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchMessages = async () => {
@@ -13,6 +15,7 @@ const Messages = () => {
             if (!userEmail) {
                 console.error('User email not found in token');
                 setLoading(false);
+                navigate("/auth");
                 return;
             }
 
@@ -40,21 +43,21 @@ const Messages = () => {
 
     return (
         <div className="messages">
-            <h2>Messages</h2>
-            {messages.length === 0 ? (
-                <p>No messages found.</p>
-            ) : (
-                <ul>
-                    {messages.map((message, index) => (
-                        <li key={index}>
-                            <strong>From:</strong> {message.sender}<br />
-                            <strong>Message:</strong> {message.message}<br />
-                            <strong>Sent:</strong> {new Date(message.createdAt).toLocaleString()}
-                        </li>
-                    ))}
-                </ul>
-            )}
-        </div>
+        <h2>Messages</h2>
+        {messages.length === 0 ? (
+            <p>No messages found.</p>
+        ) : (
+            <div className="message-cards">
+                {messages.map((message, index) => (
+                    <div className="card" key={index}>
+                        <h5>From: {message.sender}</h5>
+                        <p><strong>Message:</strong> {message.message}</p>
+                        <p><strong>Sent:</strong> {new Date(message.createdAt).toLocaleString()}</p>
+                    </div>
+                ))}
+            </div>
+        )}
+    </div>
     );
 };
 
