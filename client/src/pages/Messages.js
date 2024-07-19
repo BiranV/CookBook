@@ -11,7 +11,7 @@ const Messages = () => {
 
     useEffect(() => {
         const fetchMessages = async () => {
-            const userEmail = getUserEmailFromToken(); // Retrieve user email from JWT token
+            const userEmail = getUserEmailFromToken();
             if (!userEmail) {
                 console.error('User email not found in token');
                 setLoading(false);
@@ -22,11 +22,11 @@ const Messages = () => {
             try {
                 const response = await axios.get('/messages', {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        Authorization: `Bearer ${ localStorage.getItem('token') }`,
                         'X-User-Email': userEmail
                     }
                 });
-                setMessages(response.data);
+                setMessages(response.data.messages);
             } catch (error) {
                 console.error('Error fetching messages:', error);
             } finally {
@@ -44,7 +44,7 @@ const Messages = () => {
     return (
         <div className="messages">
             {messages.length === 0 ? (
-                <p>No messages found.</p>
+                <h3>No messages found.</h3>
             ) : (
                 <>
                     {messages.map((message, index) => (

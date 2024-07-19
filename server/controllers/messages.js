@@ -16,13 +16,15 @@ const sendMessage = async (req, res) => {
 const getMessages = async (req, res) => {
     try {
         const messages = await Message.find({ recipient: req.user.email });
+        const messageCount = messages.length;
 
-        return res.status(200).json(messages);
+        return res.status(200).json({ messages, count: messageCount });
     } catch (error) {
         console.error('Error retrieving messages:', error);
         return res.status(500).json({ message: 'Failed to retrieve messages' });
     }
 };
+
 
 module.exports = {
     sendMessage,
