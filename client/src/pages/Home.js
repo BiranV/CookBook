@@ -406,7 +406,7 @@ const Home = () => {
                                     <DeleteOutlineIcon className="icon" onClick={() => handleRemoveIngredient(index)} />
                                 </div>
                             ))}
-                            <button className="" style={{ width: '120px' }} type="button" onClick={() => setForm({ ...form, ingredients: [...form.ingredients, ""] })}>Add ingredient</button>
+                            <button className="add-btn" style={{ width: '120px' }} type="button" onClick={() => setForm({ ...form, ingredients: [...form.ingredients, ""] })}>Add ingredient</button>
                             <label>Steps</label>
                             {form.steps?.map((step, index) => (
                                 <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
