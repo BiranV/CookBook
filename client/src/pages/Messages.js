@@ -74,7 +74,6 @@ const Messages = () => {
                         />
                     </div>
                 ))
-
             )}
         </div>
     );

@@ -21,13 +21,20 @@ const Header = () => {
       setMessageCount(response.data.count);
     } catch (error) {
       console.error('Error fetching messages:', error);
+      if (error.response && error.response.status === 401) {
+        // Token expired or invalid
+        localStorage.removeItem('token');
+        setAuthMode(false);
+        navigate('/auth');
+      }
     }
   };
 
   useEffect(() => {
-    if (localStorage.getItem('token')) {
+    const token = localStorage.getItem('token');
+    if (token) {
       fetchMessages();
-      const intervalId = setInterval(fetchMessages, 6000);
+      const intervalId = setInterval(fetchMessages, 10000);
       return () => clearInterval(intervalId);
     } else {
       setMessageCount(0);
@@ -39,24 +46,24 @@ const Header = () => {
 
   const handleLogin = () => {
     navigate("/auth");
-  }
+  };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem('token');
     setAuthMode(false);
     setMessageCount(0); // Clear message count on logout
-    navigate("/")
+    navigate('/');
   };
 
   const handleInbox = () => {
-    navigate("/messages");
-  }
+    navigate('/messages');
+  };
 
   return (
     <header className="header">
       <Link to="/" className="logo">CookBook</Link>
       <div className="header-btns">
-        {!isAuthRoute && authMode && isLoggedIn && (
+        {!isAuthRoute && isLoggedIn && (
           <>
             <button onClick={handleInbox} className="inbox-btn">
               <MailIcon />
@@ -65,12 +72,12 @@ const Header = () => {
             <button onClick={handleLogout} className="logout-btn">Log Out</button>
           </>
         )}
-        {!isAuthRoute && !authMode && (
+        {!isAuthRoute && !isLoggedIn && (
           <button onClick={handleLogin} className="login-btn">Login</button>
         )}
       </div>
     </header>
   );
-}
+};
 
 export default Header;
