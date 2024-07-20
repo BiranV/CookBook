@@ -3,6 +3,7 @@ import axios from '../api/axios';
 import Spinner from '../components/Spinner';
 import { getUserEmailFromToken } from '../utils/authUtils';
 import { useNavigate } from "react-router-dom";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'; // Import delete icon
 
 const Messages = () => {
     const [messages, setMessages] = useState([]);
@@ -22,7 +23,7 @@ const Messages = () => {
             try {
                 const response = await axios.get('/messages', {
                     headers: {
-                        Authorization: `Bearer ${ localStorage.getItem('token') }`,
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
                         'X-User-Email': userEmail
                     }
                 });
@@ -35,7 +36,21 @@ const Messages = () => {
         };
 
         fetchMessages();
-    }, []);
+    }, [navigate]);
+
+    const handleDeleteMessage = async (messageId) => {
+        try {
+            await axios.delete(`/messages/${messageId}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            setMessages(messages.filter(message => message._id !== messageId));
+        } catch (error) {
+            console.error('Error deleting message:', error);
+        }
+    };
 
     if (loading) {
         return <Spinner />;
@@ -46,15 +61,20 @@ const Messages = () => {
             {messages.length === 0 ? (
                 <h3>No messages found.</h3>
             ) : (
-                <>
-                    {messages.map((message, index) => (
-                        <div className="card" key={index}>
+                messages.map((message) => (
+                    <div className="card" key={message._id}>
+                        <div className='details'>
                             <p><strong>From:</strong>  {message.sender}</p>
                             <p><strong>Message:</strong> {message.message}</p>
                             <p><strong>Sent:</strong> {new Date(message.createdAt).toLocaleString()}</p>
                         </div>
-                    ))}
-                </>
+                        <DeleteOutlineIcon
+                            className="icon"
+                            onClick={() => handleDeleteMessage(message._id)}
+                        />
+                    </div>
+                ))
+
             )}
         </div>
     );

@@ -18,5 +18,6 @@ router.delete('/:id', verifyToken, recipesControllers.deleteRecipe);
 // Message routes (protected with verifyToken middleware)
 router.post('/messages', verifyToken, messageControllers.sendMessage);
 router.get('/messages', verifyToken, messageControllers.getMessages);
+router.delete('/messages/:id',verifyToken, messageControllers.deleteMessage);
 
 module.exports = router;
