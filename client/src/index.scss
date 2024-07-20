@@ -1,14 +1,17 @@
 // Variables
 $shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-$blue: #2F75D1;
-$red: #DB3052;
-$green: #00905B;
-$light-gray: #EEEEEE;
-$gray: #CCCCCC;
-$dark-gray: #555555;
-$white: #FFFFFF;
-$light-black: #252525;
-$black: #000000;
+$colors: (
+  blue: #2F75D1,
+  red: #DB3052,
+  green: #00905B,
+  purple: #a91cd4,
+  light-gray: #EEEEEE,
+  gray: #CCCCCC,
+  dark-gray: #555555,
+  white: #FFFFFF,
+  light-black: #252525,
+  black: #000000,
+);
 
 // Global styles
 * {
@@ -18,25 +21,26 @@ $black: #000000;
   font-family: "Trebuchet MS", sans-serif;
 }
 
-// Global element styles
 body {
-  background-color: $light-gray;
+  background-color: map-get($colors, light-gray);
   text-align: center;
 }
 
 // Common button styles
 @mixin button-style($bg-color, $border-color, $text-color) {
   appearance: none;
-  border: 1px solid;
+  border: 1px solid $border-color;
   width: 100px;
+  height: 30px;
   cursor: pointer;
   font-weight: bold;
   padding: 0.4rem 0.6rem;
   box-shadow: $shadow;
   opacity: 0.7;
   transition: 0.3s;
-  background-color: $white;
+  background-color: map-get($colors, white);
   color: $text-color;
+  box-sizing: border-box;  // Include padding and border in width/height
 
   &:hover {
     opacity: 1;
@@ -46,93 +50,66 @@ body {
   }
 }
 
-input,
-textarea,
-select {
+input, textarea, select {
   font: inherit;
   display: block;
-  border: 1px solid $gray;
+  border: 1px solid map-get($colors, gray);
   border-radius: 4px;
   padding: 0.25rem;
   width: 100%;
   resize: none;
-  background-color: $white;
+  background-color: map-get($colors, white);
 }
 
 // Authentication section
 .auth {
-  h2 {
-    margin-top: 1rem;
-  }
-
-  p {
-    font-size: small;
-  }
-
+  h2 { margin-top: 1rem; }
+  p { font-size: small; }
+  
   form {
     width: 350px;
     margin: auto;
     text-align: left;
-
-    label {
+    
+    label { 
       display: block;
       font-weight: bold;
-      margin-top: 1rem;
-      margin-bottom: 0.2rem;
+      margin: 1rem 0 0.2rem; 
     }
-
-    .login-btn {
-      @include button-style($white, $dark-gray, $dark-gray);
-      margin: 0.5rem 0 0 0;
-    }
-
-    p {
-      color: $red;
-      margin: 0.5rem 0;
-    }
+    
+    .login-btn { @include button-style(map-get($colors, white), map-get($colors, dark-gray), map-get($colors, dark-gray)); }
+    p { color: map-get($colors, red); margin: 0.5rem 0; }
   }
 
-  label {
-    margin-top: 1rem;
-  }
-
-  .account {
-    margin-top: 1rem;
-
-    span {
-      cursor: pointer;
-      text-decoration: underline;
-    }
-  }
+  .account { margin-top: 1rem; span { cursor: pointer; text-decoration: underline; } }
 }
 
+// Header section
 .header {
   width: 100%;
   height: 5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-image: url('./assets/background.png');
+  background: url('./assets/background.png') no-repeat center center;
   background-size: cover;
   padding: 0 7%;
   box-shadow: $shadow;
 
-  .logo {
+  .logo { 
     font-size: 2rem;
-    color: $white;
-    text-shadow: 1px 1px 2px $black;
+    color: map-get($colors, white);
+    text-shadow: 1px 1px 2px map-get($colors, black);
     font-weight: bold;
     text-decoration: none;
   }
 
-  // Header section
   .header-btns {
     display: flex;
     gap: 10px;
 
-    .login-btn,
-    .logout-btn {
-      @include button-style($white, $dark-gray, $dark-gray);
+    .login-btn, .logout-btn, .send-msg-btn { 
+      @include button-style(map-get($colors, white), map-get($colors, dark-gray), map-get($colors, dark-gray)); 
     }
 
     .inbox-btn {
@@ -140,95 +117,72 @@ select {
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 40px;
-      height: 40px;
+      width: 30px;
+      height: 30px;
       border: none;
       border-radius: 50%;
-      background-color: $dark-gray;
-      color: #fff;
+      background-color: map-get($colors, dark-gray);
+      color: map-get($colors, white);
       margin-right: 10px;
       cursor: pointer;
       font-size: 1.2em;
 
       .message-count {
         position: absolute;
-        top: -5px;
-        right: -5px;
+        top: -8px;
+        right: -8px;
         width: 20px;
         height: 20px;
         border-radius: 50%;
-        background-color: red;
-        color: white;
+        background-color: map-get($colors, red);
+        color: map-get($colors, white);
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 0.8em;
+        font-size: 0.6em;
       }
     }
-
   }
-
 }
 
 // Home section
 .home {
   max-width: 800px;
-  margin: auto;
-  margin-top: 2rem;
+  margin: 2rem auto;
 
-  input[type="text"].filter {
+  input[type="text"].filter, .sort-options {
     width: 40%;
     margin: 1rem auto;
-  }
-
-  .sort-options {
-    width: 40%;
-    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-
-    select {
-      width: 45%;
-    }
+    
+    select { width: 45%; }
   }
 
-  .add-btn {
-    @include button-style($white, $dark-gray, $dark-gray);
+  .add-btn, .send-msg-btn {
+    @include button-style(map-get($colors, white), map-get($colors, dark-gray), map-get($colors, dark-gray));
   }
 
   .card {
-    background-color: $white;
+    background-color: map-get($colors, white);
     padding: 1rem;
     margin: 1rem 0;
     text-align: left;
     border: none;
     box-shadow: $shadow;
 
-    h5 {
-      margin: 0.25rem 0;
-    }
+    h5 { margin: 0.25rem 0; }
 
     .container-buttons {
       display: flex;
       flex-wrap: wrap;
       gap: 5px;
 
-      .view-btn {
-        @include button-style($white, $green, $green);
-      }
-
-      .edit-btn {
-        @include button-style($white, $blue, $blue);
-      }
-
-      .delete-btn {
-        @include button-style($white, $red, $red);
-      }
-
-      .pdf-btn {
-        @include button-style($white, $light-black, $light-black);
-      }
+      .view-btn { @include button-style(map-get($colors, white), map-get($colors, green), map-get($colors, green)); }
+      .edit-btn { @include button-style(map-get($colors, white), map-get($colors, blue), map-get($colors, blue)); }
+      .delete-btn { @include button-style(map-get($colors, white), map-get($colors, red), map-get($colors, red)); }
+      .pdf-btn { @include button-style(map-get($colors, white), map-get($colors, light-black), map-get($colors, light-black)); }
     }
 
     .container-images {
@@ -239,28 +193,17 @@ select {
         margin: 0 0.5rem 0 0;
         max-height: 80px;
         object-fit: cover;
-        border: 1px solid $dark-gray;
+        border: 1px solid map-get($colors, dark-gray);
         box-shadow: $shadow;
         cursor: zoom-in;
       }
     }
   }
 
-  label {
-    display: block;
-    margin: 1rem 0 0.25rem 0;
-    text-decoration: underline;
-  }
+  label { display: block; margin: 1rem 0 0.25rem; text-decoration: underline; }
 
-  ol,
-  ul {
-    list-style-position: inside;
-  }
-
-  li {
-    line-height: 1.5;
-    margin: 0.3rem 0;
-  }
+  ol, ul { list-style-position: inside; }
+  li { line-height: 1.5; margin: 0.3rem 0; }
 
   .popup {
     position: fixed;
@@ -276,17 +219,14 @@ select {
     text-align: left;
 
     .inner {
-      background-color: $light-gray;
+      background-color: map-get($colors, light-gray);
       padding: 1rem;
       width: 100%;
       max-width: 480px;
       overflow: auto;
       max-height: calc(100vh - 4rem);
 
-      h2 {
-        margin-bottom: 1rem;
-        color: $dark-gray;
-      }
+      h2 { margin-bottom: 1rem; color: map-get($colors, dark-gray); }
 
       .container-image {
         display: flex;
@@ -296,7 +236,7 @@ select {
           width: 160px;
           max-height: 80px;
           object-fit: cover;
-          border: 1px solid $dark-gray;
+          border: 1px solid map-get($colors, dark-gray);
           box-shadow: $shadow;
           cursor: zoom-in;
           margin-bottom: 0.5rem;
@@ -310,9 +250,9 @@ select {
             position: absolute;
             top: 5px;
             right: 5px;
-            background-color: $white;
-            color: $black;
-            border: 2px solid $black;
+            background-color: map-get($colors, white);
+            color: map-get($colors, black);
+            border: 2px solid map-get($colors, black);
             padding: 2px;
             cursor: pointer;
           }
@@ -324,65 +264,37 @@ select {
         flex-wrap: wrap;
         gap: 5px;
 
-        .submit-btn {
-          @include button-style($white, $green, $green);
-        }
-
-        .clear-btn {
-          @include button-style($white, $blue, $blue);
-        }
-
-        .close-btn {
-          @include button-style($white, $red, $red);
-        }
+        .submit-btn { @include button-style(map-get($colors, white), map-get($colors, green), map-get($colors, green)); }
+        .clear-btn { @include button-style(map-get($colors, white), map-get($colors, blue), map-get($colors, blue)); }
+        .close-btn { @include button-style(map-get($colors, white), map-get($colors, red), map-get($colors, red)); }
       }
     }
 
     .zoom-img {
       padding: 1rem;
-      width: auto;
-      max-width: auto;
-      overflow: auto;
-      max-height: calc(100vh - 4rem);
       text-align: center;
 
-      .full-image {
-        display: block;
-        max-height: 350px;
-        max-width: 500px;
-      }
-
-      .close-btn {
-        @include button-style($white, $red, $red);
-        margin-top: 1rem;
-      }
+      .full-image { display: block; max-height: 350px; max-width: 500px; }
+      .close-btn { @include button-style(map-get($colors, white), map-get($colors, red), map-get($colors, red)); margin-top: 1rem; }
     }
   }
 
-  input[type="text"],
-  textarea {
-    display: block;
-    width: 100%;
+  input[type="text"], textarea {
     padding: 0.5rem;
     resize: vertical;
     max-height: 150px;
     margin-bottom: 0.3rem;
   }
 
-  input[type="file"].inputfile {
-    display: block;
-    margin: 1rem 0;
-    resize: none;
-    padding-left: 0.2rem;
-  }
+  input[type="file"].inputfile { margin: 1rem 0; padding-left: 0.2rem; }
 }
 
 // Other styles
 .snackbar {
   min-width: 250px;
   margin-left: -125px;
-  background-color: $dark-gray;
-  color: $light-gray;
+  background-color: map-get($colors, dark-gray);
+  color: map-get($colors, light-gray);
   text-align: center;
   border-radius: 2px;
   padding: 8px;
@@ -400,41 +312,36 @@ select {
   max-width: 800px;
   margin: auto;
   margin-top: 2rem;
+
+  .card {
+    background-color: map-get($colors, white);
+    padding: 1rem;
+    margin: 1rem 0;
+    text-align: left;
+    border: none;
+    box-shadow: $shadow;
+  }
 }
+
 
 .message-form {
   margin-top: 2rem;
 
-  .message-btn {
-    @include button-style($white, $dark-gray, $dark-gray);
-  }
-}
-
-.card {
-  background-color: $white;
-  padding: 1rem;
-  margin: 1rem 0;
-  text-align: left;
-  border: none;
-  box-shadow: $shadow;
+  .send-btn { @include button-style(map-get($colors, white), map-get($colors, green), map-get($colors, green)); }
+  .cancel-btn { @include button-style(map-get($colors, white), map-get($colors, red), map-get($colors, red)); }
 }
 
 @keyframes spinner {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .loading-spinner {
   margin: 2rem auto;
   width: 50px;
   height: 50px;
-  border: 10px solid $gray;
-  border-top: 10px solid $dark-gray;
+  border: 10px solid map-get($colors, gray);
+  border-top: 10px solid map-get($colors, dark-gray);
   border-radius: 50%;
   animation: spinner 1.5s linear infinite;
 }
