@@ -40,6 +40,11 @@ const Home = () => {
         active: false,
         editMode: false,
     });
+    const [messageFormState, setMessageFormState] = useState({
+        active: false,
+        recipient: "",
+        sender: "",
+    });
     const [snackbar, setSnackbar] = useState({
         show: false,
         text: "",
@@ -339,6 +344,21 @@ const Home = () => {
         }
     });
 
+    const openMessageForm = (recipient) => {
+        setMessageFormState({
+            active: true,
+            recipient,
+            sender: getUserEmailFromToken(),
+        });
+    };
+
+    const closeMessageForm = () => {
+        setMessageFormState({
+            ...messageFormState,
+            active: false,
+        });
+    };
+
     if (loading) {
         return <Spinner />;
     }
@@ -369,9 +389,9 @@ const Home = () => {
                             <ul>{recipe.ingredients.map((ingredient, index) => (<li key={index}>{ingredient}</li>))}</ul>
                             <label>Steps</label>
                             <ol>{recipe.steps.map((step, index) => (<li key={index}>{step}</li>))}</ol>
-                            {authMode &&
-                                <MessageForm recipient={recipe.userEmail} sender={getUserEmailFromToken()} />
-                            }
+                            {authMode && recipe.userEmail !== getUserEmailFromToken() && (
+                                <button className="send-msg-btn" style={{ width: '120px' }} onClick={() => openMessageForm(recipe.userEmail)}>Send Message</button>
+                            )}
                         </div>
 
                     )}
@@ -439,6 +459,18 @@ const Home = () => {
                     imageUrl={imageUrl}
                     setPopupImage={setPopupImage}
                 />
+            )}
+            {messageFormState.active && (
+                <div className="popup">
+                    <div className="inner">
+                        <h2>Send Message</h2>
+                        <MessageForm
+                            recipient={messageFormState.recipient}
+                            sender={messageFormState.sender}
+                            onClose={closeMessageForm}
+                        />
+                    </div>
+                </div>
             )}
             {snackbar.show && <Snackbar text={snackbar.text} />}
         </div>
