@@ -85,7 +85,7 @@ select {
     }
 
     .login-btn {
-     margin-top: 10px;
+      margin-top: 10px;
       @include button-style(map-get($colors, white), map-get($colors, dark-gray), map-get($colors, dark-gray));
     }
 
@@ -388,12 +388,24 @@ select {
   margin-top: 2rem;
 
   .card {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     background-color: map-get($colors, white);
     padding: 1rem;
     margin: 1rem 0;
     text-align: left;
     border: none;
     box-shadow: $shadow;
+
+    .icon {
+      top: 5px;
+      right: 5px;
+      background-color: map-get($colors, white);
+      color: map-get($colors, black);
+      padding: 2px;
+      cursor: pointer;
+    }
   }
 }
 
