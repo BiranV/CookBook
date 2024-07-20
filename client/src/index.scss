@@ -40,7 +40,7 @@ body {
   transition: 0.3s;
   background-color: map-get($colors, white);
   color: $text-color;
-  box-sizing: border-box;  // Include padding and border in width/height
+  box-sizing: border-box; // Include padding and border in width/height
 
   &:hover {
     opacity: 1;
@@ -50,7 +50,9 @@ body {
   }
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
   font: inherit;
   display: block;
   border: 1px solid map-get($colors, gray);
@@ -63,25 +65,44 @@ input, textarea, select {
 
 // Authentication section
 .auth {
-  h2 { margin-top: 1rem; }
-  p { font-size: small; }
-  
+  h2 {
+    margin-top: 1rem;
+  }
+
+  p {
+    font-size: small;
+  }
+
   form {
     width: 350px;
     margin: auto;
     text-align: left;
-    
-    label { 
+
+    label {
       display: block;
       font-weight: bold;
-      margin: 1rem 0 0.2rem; 
+      margin: 1rem 0 0.2rem;
     }
-    
-    .login-btn { @include button-style(map-get($colors, white), map-get($colors, dark-gray), map-get($colors, dark-gray)); }
-    p { color: map-get($colors, red); margin: 0.5rem 0; }
+
+    .login-btn {
+     margin-top: 10px;
+      @include button-style(map-get($colors, white), map-get($colors, dark-gray), map-get($colors, dark-gray));
+    }
+
+    p {
+      color: map-get($colors, red);
+      margin: 0.5rem 0;
+    }
   }
 
-  .account { margin-top: 1rem; span { cursor: pointer; text-decoration: underline; } }
+  .account {
+    margin-top: 1rem;
+
+    span {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  }
 }
 
 // Header section
@@ -96,7 +117,7 @@ input, textarea, select {
   padding: 0 7%;
   box-shadow: $shadow;
 
-  .logo { 
+  .logo {
     font-size: 2rem;
     color: map-get($colors, white);
     text-shadow: 1px 1px 2px map-get($colors, black);
@@ -108,8 +129,10 @@ input, textarea, select {
     display: flex;
     gap: 10px;
 
-    .login-btn, .logout-btn, .send-msg-btn { 
-      @include button-style(map-get($colors, white), map-get($colors, dark-gray), map-get($colors, dark-gray)); 
+    .login-btn,
+    .logout-btn,
+    .send-msg-btn {
+      @include button-style(map-get($colors, white), map-get($colors, dark-gray), map-get($colors, dark-gray));
     }
 
     .inbox-btn {
@@ -150,17 +173,21 @@ input, textarea, select {
   max-width: 800px;
   margin: 2rem auto;
 
-  input[type="text"].filter, .sort-options {
+  input[type="text"].filter,
+  .sort-options {
     width: 40%;
     margin: 1rem auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    
-    select { width: 45%; }
+
+    select {
+      width: 45%;
+    }
   }
 
-  .add-btn, .send-msg-btn {
+  .add-btn,
+  .send-msg-btn {
     @include button-style(map-get($colors, white), map-get($colors, dark-gray), map-get($colors, dark-gray));
   }
 
@@ -172,17 +199,30 @@ input, textarea, select {
     border: none;
     box-shadow: $shadow;
 
-    h5 { margin: 0.25rem 0; }
+    h5 {
+      margin: 0.25rem 0;
+    }
 
     .container-buttons {
       display: flex;
       flex-wrap: wrap;
       gap: 5px;
 
-      .view-btn { @include button-style(map-get($colors, white), map-get($colors, green), map-get($colors, green)); }
-      .edit-btn { @include button-style(map-get($colors, white), map-get($colors, blue), map-get($colors, blue)); }
-      .delete-btn { @include button-style(map-get($colors, white), map-get($colors, red), map-get($colors, red)); }
-      .pdf-btn { @include button-style(map-get($colors, white), map-get($colors, light-black), map-get($colors, light-black)); }
+      .view-btn {
+        @include button-style(map-get($colors, white), map-get($colors, green), map-get($colors, green));
+      }
+
+      .edit-btn {
+        @include button-style(map-get($colors, white), map-get($colors, blue), map-get($colors, blue));
+      }
+
+      .delete-btn {
+        @include button-style(map-get($colors, white), map-get($colors, red), map-get($colors, red));
+      }
+
+      .pdf-btn {
+        @include button-style(map-get($colors, white), map-get($colors, light-black), map-get($colors, light-black));
+      }
     }
 
     .container-images {
@@ -200,10 +240,21 @@ input, textarea, select {
     }
   }
 
-  label { display: block; margin: 1rem 0 0.25rem; text-decoration: underline; }
+  label {
+    display: block;
+    margin: 1rem 0 0.25rem;
+    text-decoration: underline;
+  }
 
-  ol, ul { list-style-position: inside; }
-  li { line-height: 1.5; margin: 0.3rem 0; }
+  ol,
+  ul {
+    list-style-position: inside;
+  }
+
+  li {
+    line-height: 1.5;
+    margin: 0.3rem 0;
+  }
 
   .popup {
     position: fixed;
@@ -226,7 +277,10 @@ input, textarea, select {
       overflow: auto;
       max-height: calc(100vh - 4rem);
 
-      h2 { margin-bottom: 1rem; color: map-get($colors, dark-gray); }
+      h2 {
+        margin-bottom: 1rem;
+        color: map-get($colors, dark-gray);
+      }
 
       .container-image {
         display: flex;
@@ -264,9 +318,17 @@ input, textarea, select {
         flex-wrap: wrap;
         gap: 5px;
 
-        .submit-btn { @include button-style(map-get($colors, white), map-get($colors, green), map-get($colors, green)); }
-        .clear-btn { @include button-style(map-get($colors, white), map-get($colors, blue), map-get($colors, blue)); }
-        .close-btn { @include button-style(map-get($colors, white), map-get($colors, red), map-get($colors, red)); }
+        .submit-btn {
+          @include button-style(map-get($colors, white), map-get($colors, green), map-get($colors, green));
+        }
+
+        .clear-btn {
+          @include button-style(map-get($colors, white), map-get($colors, blue), map-get($colors, blue));
+        }
+
+        .close-btn {
+          @include button-style(map-get($colors, white), map-get($colors, red), map-get($colors, red));
+        }
       }
     }
 
@@ -274,19 +336,31 @@ input, textarea, select {
       padding: 1rem;
       text-align: center;
 
-      .full-image { display: block; max-height: 350px; max-width: 500px; }
-      .close-btn { @include button-style(map-get($colors, white), map-get($colors, red), map-get($colors, red)); margin-top: 1rem; }
+      .full-image {
+        display: block;
+        max-height: 350px;
+        max-width: 500px;
+      }
+
+      .close-btn {
+        @include button-style(map-get($colors, white), map-get($colors, red), map-get($colors, red));
+        margin-top: 1rem;
+      }
     }
   }
 
-  input[type="text"], textarea {
+  input[type="text"],
+  textarea {
     padding: 0.5rem;
     resize: vertical;
     max-height: 150px;
     margin-bottom: 0.3rem;
   }
 
-  input[type="file"].inputfile { margin: 1rem 0; padding-left: 0.2rem; }
+  input[type="file"].inputfile {
+    margin: 1rem 0;
+    padding-left: 0.2rem;
+  }
 }
 
 // Other styles
@@ -327,13 +401,23 @@ input, textarea, select {
 .message-form {
   margin-top: 2rem;
 
-  .send-btn { @include button-style(map-get($colors, white), map-get($colors, green), map-get($colors, green)); }
-  .cancel-btn { @include button-style(map-get($colors, white), map-get($colors, red), map-get($colors, red)); }
+  .send-btn {
+    @include button-style(map-get($colors, white), map-get($colors, green), map-get($colors, green));
+  }
+
+  .cancel-btn {
+    @include button-style(map-get($colors, white), map-get($colors, red), map-get($colors, red));
+  }
 }
 
 @keyframes spinner {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .loading-spinner {
